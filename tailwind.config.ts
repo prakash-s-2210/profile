@@ -9,9 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "success-300": "#BEF264",
-        "secondary-100": "#E0F2FE",
-        "secondary-800": "#075985"
+        
       }
     },
   },

@@ -1,8 +1,14 @@
 import Image from "next/image";
 
-const Navbar = () => {
+import { IProfile } from "@/types";
+
+interface INavbarProps{
+  profileData: IProfile
+}
+
+const Navbar = ({profileData}: INavbarProps) => {
   return (
-    <header className="py-5 px-5 lg:px-0">
+    <header className="max-w-5xl  mx-auto py-5 px-5 lg:px-0">
       <nav className="flex-between">
         <p className="flex items-center text-zinc-900 text-2xl font-bold">
           <Image
@@ -65,8 +71,8 @@ const Navbar = () => {
 
           <div className="relative">
             <Image
-              src="/assets/icons/user.svg"
-              alt="user"
+              src={profileData.profilePicture}
+              alt={profileData.name}
               width={42}
               height={42}
             />
