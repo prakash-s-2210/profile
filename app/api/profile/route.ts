@@ -2,11 +2,27 @@ import { NextResponse } from "next/server";
 
 import Profile from "@/mongodb/profile.model";
 import { connectToDB } from "@/lib/mongoose";
+import Project from "@/mongodb/project.model";
+import Playground from "@/mongodb/playground.model";
+import Certificate from "@/mongodb/certificate.model";
 
 export const GET = async (request: Request) => {
   try {
     await connectToDB();
-    const profileData = await Profile.find({}).exec();
+    const profileData = await Profile.find({})
+      .populate({
+        path: "projects",
+        model: Project,
+      })
+      .populate({
+        path: "playgrounds",
+        model: Playground,
+      })
+      .populate({
+        path: "certificates",
+        model: Certificate,
+      })
+      .exec();
     return NextResponse.json(profileData, { status: 200 });
   } catch (error) {
     console.log(error);

@@ -1,34 +1,36 @@
-import { IProject } from "@/types";
 import Image from "next/image";
+import Link from "next/link";
 
-interface IProjectProps{
-    project: IProject
+import { IProject } from "@/types";
+import EditProject from "../edit-form-modal/EditProject";
+
+interface IProjectProps {
+  project: IProject;
 }
 
 const ProjectCard = ({ project }: IProjectProps) => {
-  const [label, imgSrc] = project.technology.split("|")
+  const [label, imgSrc] = project.technology.split("|");
 
   return (
-    <div className="flex flex-col max-md:items-center p-4 rounded-lg border border-zinc-100 bg-zink-50">
+    <div className="flex flex-col p-4 rounded-lg border border-zinc-100 bg-zink-50">
       <Image
         src={project.picture}
         alt={project.title}
         width={327}
         height={200}
-        className="max-w-[327px] max-h-[200px] md:h-full"
+        className="md:max-h-[200px] md:h-full object-contain"
       />
 
-      <h3 className="text-lg font-bold text-zinc-900 mt-5">
-        {project.title}
-      </h3>
+      <div className="flex-between gap-5 mt-5">
+        <Link href={project.githubLink} className="text-lg font-bold text-zinc-900">
+          {project.title}
+        </Link>
+
+        <EditProject project={project} />
+      </div>
 
       <div className="mt-2 flex justify-start items-center gap-3">
-        <Image
-          src={imgSrc}
-          alt={label}
-          width={20}
-          height={20}
-        />
+        <Image src={imgSrc} alt={label} width={20} height={20} />
 
         <p className="text-zinc-500 text-sm align-middle">{label}</p>
       </div>

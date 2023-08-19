@@ -1,24 +1,32 @@
 import Image from "next/image";
+import Link from "next/dist/client/link";
+import { SidebarModal } from "./SidebarModal";
 
-import { IProfile } from "@/types";
-
-interface INavbarProps{
-  profileData: IProfile
+interface INavbarProps {
+  profilePicture: string;
+  query:string;
 }
 
-const Navbar = ({profileData}: INavbarProps) => {
+const Navbar = async ({ profilePicture, query }: INavbarProps) => {
   return (
     <header className="max-w-5xl  mx-auto py-5 px-5 lg:px-0">
       <nav className="flex-between">
-        <p className="flex items-center text-zinc-900 text-2xl font-bold">
-          <Image
-            src="/assets/icons/logo.svg"
-            alt="logo"
-            width={24}
-            height={24}
-          />
-          odedamn
-        </p>
+        <div className="flex items-center gap-2">
+          <SidebarModal query={query} />
+
+          <Link
+            href="/"
+            className="flex items-center text-zinc-900 text-2xl font-bold"
+          >
+            <Image
+              src="/assets/icons/logo.svg"
+              alt="logo"
+              width={24}
+              height={24}
+            />
+            odedamn
+          </Link>
+        </div> 
 
         <div className="flex gap-6">
           <div className="max-md:hidden flex items-center gap-3 max-w-[368px] px-3 py-2 border border-zinc-100 rounded-[10px]">
@@ -49,7 +57,7 @@ const Navbar = ({profileData}: INavbarProps) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 max-sm:hidden">
             <div className="flex items-center gap-1 px-3 py-2">
               <Image
                 src="/assets/icons/lightning.svg"
@@ -71,10 +79,11 @@ const Navbar = ({profileData}: INavbarProps) => {
 
           <div className="relative">
             <Image
-              src={profileData.profilePicture}
-              alt={profileData.name}
+              src={`${profilePicture ?? "/assets/images/user.webp"}`}
+              alt="user profile picture"
               width={42}
               height={42}
+              className="shadow-picture min-w-[42px] min-h-[42px] max-w-[42px] max-h-[42px] object-cover rounded-full"
             />
 
             <Image

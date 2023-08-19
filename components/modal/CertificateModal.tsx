@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { Types } from "mongoose";
 
-import Modal from "./shared/Modal";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+import { useState, useTransition } from "react";
+
+import Modal from "../shared/Modal";
 import {
   Select,
   SelectContent,
@@ -12,57 +16,84 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { technologies } from "@/constants";
-import { tech } from "@/types";
-import { createProject } from "@/lib/actions/profile.actions";
+} from "@/components/shadcn-ui/select";
 
-const Project = () => {
-  const [isModalOpen, setisModalOpen] = useState(false);
-  const [ loading, setLoading ] = useState(false);
-  const [projectData, setprojectData] = useState({
-    title: "",
-    technology: "",
-    githubLink: "",
-    picture: "",
+import { certificateIconChoices } from "@/constants";
+import { ICertificate, tech } from "@/types";
+import { createCertificate, editCertificate } from "@/lib/actions/certificate.actions";
+import { convertMonthYearFormat } from "@/lib/utils";
+
+interface ICertificateModalProps {
+  openModal: boolean;
+  closeModal: () => void;
+  id?: Types.ObjectId;
+  certificateInfo?: ICertificate;
+}
+
+const CertificateModal = ({
+  openModal,
+  closeModal,
+  id,
+  certificateInfo,
+}: ICertificateModalProps) => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const issuedDate = convertMonthYearFormat(certificateInfo?.issuedDate as Date)
+  const [certificateData, setCertificateData] = useState({
+    title: certificateInfo?.title ?? "",
+    technology: certificateInfo?.technology ?? "",
+    issuedDate: issuedDate  ?? "",
+    credentials: certificateInfo?.credentials ?? "",
   });
-  const handleClick = () => {
-    setisModalOpen(false);
-  };
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    await createProject(
-      projectData.title,
-      projectData.technology,
-      projectData.githubLink,
-      projectData.picture
-    );
+    if (certificateInfo) {
+        await editCertificate(
+          certificateData.title,
+          certificateData.technology,
+          certificateData.issuedDate,
+          certificateData.credentials,
+          certificateInfo._id
+        );
+    } else {
+        await createCertificate(
+          certificateData.title,
+          certificateData.technology,
+          certificateData.issuedDate,
+          certificateData.credentials,
+          id!
+        );
+      setCertificateData({
+        title: "",
+        technology: "",
+        issuedDate: "",
+        credentials: ""
+      });
+    }
     setLoading(false);
-    setprojectData({
-      title: "",
-      technology: "",
-      githubLink: "",
-      picture: "",
+    closeModal();
+    startTransition(() => {
+      router.refresh();
     });
   };
 
   const handleInputChange = (name: string, value: string) => {
-    console.log(name, value, "name");
-    setprojectData({
-      ...projectData,
+    setCertificateData({
+      ...certificateData,
       [name]: value,
     });
   };
 
   return (
     <>
-      {isModalOpen && (
-        <Modal isModalOpen={isModalOpen} handleClick={handleClick}>
+      {openModal && (
+        <Modal openModal={openModal} closeModal={closeModal}>
           <section>
             <h3 className="text-gray-600 text-xl font-semibold pb-5">
-              Create a project
+             {certificateInfo ? "Update a certificate" : "Create a certificate"}
             </h3>
 
             <form
@@ -73,49 +104,51 @@ const Project = () => {
                 htmlFor="title"
                 className="text-gray-700 inline-block pb-3 font-medium text-base"
               >
-                Project Title
+                Certificate Title
               </label>
 
               <input
                 type="text"
                 required
                 placeholder="Enter a title"
-                value={projectData.title}
+                value={certificateData.title}
                 className="w-full pt-3 px-4 py-2 outline-none placeholder:text-gray-400 text-gray-500 border border-gray-300 rounded-lg focus:border-2 focus:border-primary-600"
                 onChange={(e) => handleInputChange("title", e.target.value)}
               />
 
               <label
-                htmlFor="title"
+                htmlFor="technology"
                 className="text-gray-700 font-medium text-base pt-5 pb-3 inline-block"
               >
                 Technology
               </label>
 
               <Select
+                value={certificateInfo?.technology}
                 onValueChange={(value) =>
                   handleInputChange("technology", value)
                 }
                 required
               >
                 <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent h-fit px-4 py-3 border border-border rounded-lg text-gray-500">
-                  <SelectValue placeholder="Select Technology" />
+                  <SelectValue placeholder="Select Technology"></SelectValue>
                 </SelectTrigger>
 
                 <SelectContent className="max-h-52 overflow-y-auto">
                   <SelectGroup>
                     <SelectLabel>Technologies</SelectLabel>
-                    {technologies.map((tech: tech) => (
+                    {certificateIconChoices.map((tech: tech) => (
                       <SelectItem
                         key={tech.label}
                         value={`${tech.label}|${tech.imgUrl}`}
                       >
-                        <div className="flex gap-5">
+                        <div className="flex items-center gap-5">
                           <Image
                             src={tech.imgUrl}
                             alt={tech.label}
                             width={18}
                             height={18}
+                            className="w-[18px] h-[18px]"
                           />
                           <p className="text-gray-500">{tech.label}</p>
                         </div>
@@ -126,71 +159,59 @@ const Project = () => {
               </Select>
 
               <label
-                htmlFor="github"
-                className="inline-block pt-5 pb-3 text-gray-700 font-medium text-base"
+                htmlFor="issuedDate"
+                className="text-gray-700 inline-block pt-5 pb-3 font-medium text-base"
               >
-                Github Link
+                Issued Date
+              </label>
+
+              <input
+                type="month"
+                required
+                placeholder="Enter a Issued Date"
+                value={certificateData.issuedDate}
+                className="w-full pt-3 px-4 py-2 outline-none placeholder:text-gray-400 text-gray-500 border border-gray-300 rounded-lg focus:border-2 focus:border-primary-600"
+                onChange={(e) => handleInputChange("issuedDate", e.target.value)}
+              />
+
+              <label
+                htmlFor="credentials"
+                className="text-gray-700 inline-block pt-5 pb-3 font-medium text-base"
+              >
+                Credentials
               </label>
 
               <input
                 type="text"
                 required
-                placeholder="Enter a Github link"
-                value={projectData.githubLink}
+                placeholder="Enter a credentials"
+                value={certificateData.credentials}
                 className="w-full pt-3 px-4 py-2 outline-none placeholder:text-gray-400 text-gray-500 border border-gray-300 rounded-lg focus:border-2 focus:border-primary-600"
-                onChange={(e) => {
-                  handleInputChange("githubLink", e.target.value);
-                }}
+                onChange={(e) => handleInputChange("credentials", e.target.value)}
               />
 
-              <label
-                htmlFor="title"
-                className="inline-block pt-5 pb-3 text-gray-700 font-medium text-base"
-              >
-                Project Preview
-              </label>
-
-              <input
-                required
-                type="file"
-                accept="image/*"
-                placeholder="Enter a Github link"
-                onChange={(e) =>
-                  new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(e.target.files[0]);
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = (error) => reject(error);
-                  }).then((base64) =>
-                    handleInputChange("picture", base64 as string)
-                  )
-                }
-                className="w-full pt-3 px-4 py-2 outline-none placeholder:text-gray-400 text-gray-500 border border-gray-300 rounded-lg focus:border-2 focus:border-primary-600"
-              />
               <div className="flex justify-end pt-10">
                 <button
                   type="submit"
                   className="px-4 py-2 bg-primary-600 rounded-lg text-sm font-semibold text-white"
                 >
-                  {`${loading ? 'Creating...' : 'Create'}`}
+                  {`${
+                    loading
+                      ? certificateInfo
+                        ? "Updating..."
+                        : "Creating..."
+                      : certificateInfo
+                      ? "Update"
+                      : "Create"
+                  }`}
                 </button>
               </div>
             </form>
           </section>
         </Modal>
       )}
-      <div className="flex-between flex-wrap gap-5">
-        <h3 className="text-zinc-900 text-2xl font-bold">Projects</h3>
-
-        <p
-          className="text-base font-semibold text-primary-600 cursor-pointer"
-          onClick={() => setisModalOpen(true)}
-        >
-          Create new project
-        </p>
-      </div>
     </>
   );
 };
 
-export default Project;
+export default CertificateModal;

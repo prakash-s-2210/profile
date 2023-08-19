@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { Types } from "mongoose";
 
-import Modal from "./shared/Modal";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+import { useState, useTransition } from "react";
+
+import Modal from "../shared/Modal";
 import {
   Select,
   SelectContent,
@@ -12,56 +16,74 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { technologies } from "@/constants";
-import { tech } from "@/types";
-import { createProject } from "@/lib/actions/profile.actions";
+} from "@/components/shadcn-ui/select";
 
-const Playground = () => {
-  const [isModalOpen, setisModalOpen] = useState(false);
+import { technologies } from "@/constants";
+import { IPlayground, tech } from "@/types";
+import { createPlayground, editPlayground } from "@/lib/actions/playground.actions";
+
+interface IPlaygroundModalProps {
+  openModal: boolean;
+  closeModal: () => void;
+  id?: Types.ObjectId;
+  playgroundInfo?: IPlayground;
+}
+
+const PlaygroundModal = ({
+  openModal,
+  closeModal,
+  id,
+  playgroundInfo,
+}: IPlaygroundModalProps) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [projectData, setprojectData] = useState({
-    title: "",
-    technology: "",
-    githubLink: "",
-    picture: "",
+  const [isPending, startTransition] = useTransition();
+  const [playgroundData, setPlaygroundData] = useState({
+    title: playgroundInfo?.title ?? "",
+    technology: playgroundInfo?.technology ?? "",
   });
-  const handleClick = () => {
-    setisModalOpen(false);
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    await createProject(
-      projectData.title,
-      projectData.technology,
-      projectData.githubLink,
-      projectData.picture
-    );
+    if (playgroundInfo) {
+        await editPlayground(
+          playgroundData.title,
+          playgroundData.technology,
+          playgroundInfo._id
+        );
+    } else {
+        await createPlayground(
+          playgroundData.title,
+          playgroundData.technology,
+          id!
+        );
+      setPlaygroundData({
+        title: "",
+        technology: "",
+      });
+    }
     setLoading(false);
-    setprojectData({
-      title: "",
-      technology: "",
-      githubLink: "",
-      picture: "",
+    closeModal();
+    startTransition(() => {
+      router.refresh();
     });
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setprojectData({
-      ...projectData,
+    setPlaygroundData({
+      ...playgroundData,
       [name]: value,
     });
   };
 
   return (
     <>
-      {isModalOpen && (
-        <Modal isModalOpen={isModalOpen} handleClick={handleClick}>
+      {openModal && (
+        <Modal openModal={openModal} closeModal={closeModal}>
           <section>
             <h3 className="text-gray-600 text-xl font-semibold pb-5">
-              Create a playground
+              {playgroundInfo ? "Update a playground" : "Create a playground"}
             </h3>
 
             <form
@@ -79,26 +101,27 @@ const Playground = () => {
                 type="text"
                 required
                 placeholder="Enter a title"
-                value={projectData.title}
+                value={playgroundData.title}
                 className="w-full pt-3 px-4 py-2 outline-none placeholder:text-gray-400 text-gray-500 border border-gray-300 rounded-lg focus:border-2 focus:border-primary-600"
                 onChange={(e) => handleInputChange("title", e.target.value)}
               />
 
               <label
-                htmlFor="title"
+                htmlFor="technology"
                 className="text-gray-700 font-medium text-base pt-5 pb-3 inline-block"
               >
                 Technology
               </label>
 
               <Select
+                value={playgroundInfo?.technology}
                 onValueChange={(value) =>
                   handleInputChange("technology", value)
                 }
                 required
               >
                 <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent h-fit px-4 py-3 border border-border rounded-lg text-gray-500">
-                  <SelectValue placeholder="Select Technology" />
+                  <SelectValue placeholder="Select Technology"></SelectValue>
                 </SelectTrigger>
 
                 <SelectContent className="max-h-52 overflow-y-auto">
@@ -129,25 +152,23 @@ const Playground = () => {
                   type="submit"
                   className="px-4 py-2 bg-primary-600 rounded-lg text-sm font-semibold text-white"
                 >
-                  {`${loading ? "Creating..." : "Create"}`}
+                  {`${
+                    loading
+                      ? playgroundInfo
+                        ? "Updating..."
+                        : "Creating..."
+                      : playgroundInfo
+                      ? "Update"
+                      : "Create"
+                  }`}
                 </button>
               </div>
             </form>
           </section>
         </Modal>
       )}
-      <div className="flex-between flex-wrap gap-5">
-        <h3 className="text-zinc-900 text-2xl font-bold">Playgrounds</h3>
-
-        <p
-          className="text-base font-semibold text-primary-600 cursor-pointer"
-          onClick={() => setisModalOpen(true)}
-        >
-          Create new playground
-        </p>
-      </div>
     </>
   );
 };
 
-export default Playground;
+export default PlaygroundModal;

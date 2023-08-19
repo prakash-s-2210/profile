@@ -11,12 +11,12 @@ import { useRouter } from "next/navigation";
 
 const Modal = ({
   children,
-  isModalOpen,
-  handleClick
+  openModal,
+  closeModal
 }: {
   children: React.ReactNode;
-  isModalOpen: boolean;
-  handleClick:  () => void
+  openModal: boolean;
+  closeModal:  () => void
 }) => {
   const overlay = useRef(null);
   const wrapper = useRef(null);
@@ -25,17 +25,17 @@ const Modal = ({
   const onClick: MouseEventHandler = useCallback(
     (e) => {
       if (e.target === overlay.current || e.target === wrapper.current) {
-        handleClick();
+        closeModal();
       }
     },
-    [handleClick, overlay, wrapper]
+    [closeModal, overlay, wrapper]
   );
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleClick();
+      if (e.key === "Escape") closeModal();
     },
-    [handleClick]
+    [closeModal]
   );
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const Modal = ({
 
   return (
     <>
-      {isModalOpen && (
+      {openModal && (
         <div
           ref={overlay}
           className="flex-center fixed inset-0 z-30 mx-auto max-h-screen overflow-auto bg-black/50 p-5"
@@ -53,7 +53,7 @@ const Modal = ({
         >
           <div
             ref={wrapper}
-            className="absolute top-1/2  -translate-y-1/2  p-4 bg-white rounded-md max-w-xl m-5"
+            className="absolute top-1/2  -translate-y-1/2  p-4 bg-white rounded-md max-w-xl m-5 overflow-auto"
           >
             {children}
           </div>
@@ -63,7 +63,7 @@ const Modal = ({
             alt="close"
             width={48}
             height={48}
-            onClick={handleClick}
+            onClick={closeModal}
             className="absolute right-10 top-10 cursor-pointer max-md:hidden"
           />
         </div>

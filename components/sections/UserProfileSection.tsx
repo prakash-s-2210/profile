@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { IProfile } from "@/types";
 
@@ -32,13 +33,14 @@ const UserProfileSection = ({profileData}: IUserProfileProps) => {
         </div>
       </div>
 
-      <div className="flex md:flex-row flex-col gap-6 max-md:px-5">
-        <div className="relative bottom-[70px] md:left-5 w-fit h-fit">
+      <div className="relative flex md:flex-row flex-col gap-6 max-md:px-5">
+        <div className="relative bottom-[70px] md:left-5 w-fit h-fit z-20">
           <Image
             src={profileData.profilePicture}
             alt={profileData.name}
             width={140}
             height={140}
+            className="min-w-[140px] min-h-[140px] max-w-[140px] max-h-[140px] object-cover rounded-full border-2 border-zinc-100"
           />
 
           <Image
@@ -46,9 +48,11 @@ const UserProfileSection = ({profileData}: IUserProfileProps) => {
             alt="badge"
             width={20}
             height={20}
-            className="absolute w-min md:top-14 max-md:-bottom-2 right-0 md:-right-2"
+            className="absolute w-min md:top-24 -bottom-4 right-0 md:-right-2"
           />
         </div>
+
+        <Link href="edit-profile" className="py-2 px-4 border border-blue-400 rounded-md text-sm text-blue-400 hover:bg-gray-100 absolute top-0 right-4">Edit Profile</Link>
 
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-2">
