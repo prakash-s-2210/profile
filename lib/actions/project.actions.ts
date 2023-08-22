@@ -18,6 +18,7 @@ export async function createProject(
           picture,
           id,
         }),
+        next: { revalidate: 3600 },
       });
       return res;
     } catch (error) {
