@@ -34,7 +34,7 @@ export async function createProject(
     id: Types.ObjectId
   ) {
     try {
-      const res = await fetch(`api/project/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/project/${id}`, {
         method: "PATCH",
         body: JSON.stringify({
           title,
