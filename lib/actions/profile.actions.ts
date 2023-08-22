@@ -8,9 +8,7 @@ export const getProfileData = async () => {
     if (res.ok) {
       return await res.json();
     }
-    throw new Error("Failed to fetch profile information");
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to fetch profile information");
   }
 };
