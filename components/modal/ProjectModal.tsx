@@ -179,7 +179,7 @@ const ProjectModal = ({
                 <SelectContent className="max-h-52 overflow-y-auto">
                   <SelectGroup>
                     <SelectLabel>Technologies</SelectLabel>
-                    {technologies.map((tech: tech) => (
+                    {technologies.map((tech: tech, index) => (
                       <SelectItem
                         key={tech.label}
                         value={`${tech.label}|${tech.imgUrl}`}

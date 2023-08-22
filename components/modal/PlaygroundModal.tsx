@@ -20,7 +20,10 @@ import {
 
 import { technologies } from "@/constants";
 import { IPlayground, tech } from "@/types";
-import { createPlayground, editPlayground } from "@/lib/actions/playground.actions";
+import {
+  createPlayground,
+  editPlayground,
+} from "@/lib/actions/playground.actions";
 
 interface IPlaygroundModalProps {
   openModal: boolean;
@@ -47,17 +50,17 @@ const PlaygroundModal = ({
     e.preventDefault();
     setLoading(true);
     if (playgroundInfo) {
-        await editPlayground(
-          playgroundData.title,
-          playgroundData.technology,
-          playgroundInfo._id
-        );
+      await editPlayground(
+        playgroundData.title,
+        playgroundData.technology,
+        playgroundInfo._id
+      );
     } else {
-        await createPlayground(
-          playgroundData.title,
-          playgroundData.technology,
-          id!
-        );
+      await createPlayground(
+        playgroundData.title,
+        playgroundData.technology,
+        id!
+      );
       setPlaygroundData({
         title: "",
         technology: "",
