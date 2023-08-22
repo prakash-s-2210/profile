@@ -110,7 +110,7 @@ const Resume = ({ profileData, filteredLanguagesWithImages }: IResumeProps) => {
       </section>
 
       <section className="flex flex-col gap-6">
-        <h3 className="text-2xl font-bold text-zinc-900">Teck skills</h3>
+        <h3 className="text-2xl font-bold text-zinc-900">Tech skills</h3>
 
         <div className="flex gap-5 flex-wrap">
           {profileData.techStacks.map((tech) => {

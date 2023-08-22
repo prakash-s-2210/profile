@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/shadcn-ui/select";
 
-import { certificateIconChoices } from "@/constants";
+import { technologies } from "@/constants";
 import { ICertificate, tech } from "@/types";
 import { createCertificate, editCertificate } from "@/lib/actions/certificate.actions";
 import { convertMonthYearFormat } from "@/lib/utils";
@@ -137,7 +137,7 @@ const CertificateModal = ({
                 <SelectContent className="max-h-52 overflow-y-auto">
                   <SelectGroup>
                     <SelectLabel>Technologies</SelectLabel>
-                    {certificateIconChoices.map((tech: tech) => (
+                    {technologies.map((tech: tech) => (
                       <SelectItem
                         key={tech.label}
                         value={`${tech.label}|${tech.imgUrl}`}
