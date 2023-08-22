@@ -2,7 +2,7 @@
 
 export const getProfileData = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/profile`, {
+    const res = await fetch(`api/profile`, {
       cache: "no-cache",
     });
     if (res.ok) {
