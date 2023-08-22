@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 
 import { IProfile } from "@/types";
 import { updateSocials } from "@/lib/actions/edit-form/editForm.actions";
+import { Switch } from "../shadcn-ui/switch";
 
 interface IProfileFormProps {
   profileData: IProfile;
@@ -23,13 +24,24 @@ const Socials = ({ profileData }: IProfileFormProps) => {
     dribble: profileData.dribble,
     behance: profileData.behance,
     youtube: profileData.youtube,
-    gmail: profileData.gmail
+    gmail: profileData.gmail,
+    socialLinks: profileData.socialLinks,
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const { github, linkedin, facebook, instagram, dribble, behance, youtube, gmail } = socialsInfo;
+    const {
+      github,
+      linkedin,
+      facebook,
+      instagram,
+      dribble,
+      behance,
+      youtube,
+      gmail,
+      socialLinks
+    } = socialsInfo;
     const id = profileData._id;
     await updateSocials({
       github,
@@ -40,26 +52,39 @@ const Socials = ({ profileData }: IProfileFormProps) => {
       behance,
       youtube,
       gmail,
+      socialLinks,
       id,
     });
     setIsSubmitting(false);
     setHasChanges(false);
     startTransition(() => {
+      router.push("/");
       router.refresh();
     });
   };
-  
-  const handleInputChange = (
-    name: string,
-    value: string,
-    originalValue: string
-  ) => {
-    value === originalValue ? setHasChanges(false) : setHasChanges(true);
-    setSocialsInfo({
+
+  const handleInputChange = (name: string, value: string | boolean) => {
+    const newSocialsInfo = {
       ...socialsInfo,
       [name]: value,
-    });
+    };
+
+    // Check if there are any changes in the newProfileInfo compared to the original data
+    const hasChanges =
+      newSocialsInfo.github !== profileData.github ||
+      newSocialsInfo.linkedin !== profileData.linkedin ||
+      newSocialsInfo.facebook !== profileData.facebook ||
+      newSocialsInfo.instagram !== profileData.instagram ||
+      newSocialsInfo.dribble !== profileData.dribble ||
+      newSocialsInfo.behance !== profileData.behance ||
+      newSocialsInfo.youtube !== profileData.youtube ||
+      newSocialsInfo.gmail !== profileData.gmail ||
+      newSocialsInfo.socialLinks !== profileData.socialLinks;
+
+    setHasChanges(hasChanges);
+    setSocialsInfo(newSocialsInfo);
   };
+
   return (
     <section className="max-w-[628px] mx-auto w-full">
       <form onSubmit={handleSubmit}>
@@ -78,9 +103,7 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Github profile URL"
               value={socialsInfo.github}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange("github", e.target.value, profileData.github)
-              }
+              onChange={(e) => handleInputChange("github", e.target.value)}
             />
           </div>
 
@@ -98,13 +121,7 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Linkedin profile URL"
               value={socialsInfo.linkedin}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange(
-                  "linkedin",
-                  e.target.value,
-                  profileData.linkedin
-                )
-              }
+              onChange={(e) => handleInputChange("linkedin", e.target.value)}
             />
           </div>
 
@@ -121,13 +138,7 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Facebook profile URL"
               value={socialsInfo.facebook}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange(
-                  "facebook",
-                  e.target.value,
-                  profileData.facebook
-                )
-              }
+              onChange={(e) => handleInputChange("facebook", e.target.value)}
             />
           </div>
 
@@ -144,13 +155,7 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Instagram profile URL"
               value={socialsInfo.instagram}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange(
-                  "instagram",
-                  e.target.value,
-                  profileData.instagram
-                )
-              }
+              onChange={(e) => handleInputChange("instagram", e.target.value)}
             />
           </div>
 
@@ -167,13 +172,7 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Dribble profile URL"
               value={socialsInfo.dribble}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange(
-                  "dribble",
-                  e.target.value,
-                  profileData.dribble
-                )
-              }
+              onChange={(e) => handleInputChange("dribble", e.target.value)}
             />
           </div>
 
@@ -190,13 +189,7 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Behance profile URL"
               value={socialsInfo.behance}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange(
-                  "behance",
-                  e.target.value,
-                  profileData.behance
-                )
-              }
+              onChange={(e) => handleInputChange("behance", e.target.value)}
             />
           </div>
 
@@ -213,9 +206,7 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Youtube channel link"
               value={socialsInfo.youtube}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange("youtube", e.target.value, profileData.youtube)
-              }
+              onChange={(e) => handleInputChange("youtube", e.target.value)}
             />
           </div>
 
@@ -233,12 +224,36 @@ const Socials = ({ profileData }: IProfileFormProps) => {
               placeholder="Enter gmail id"
               value={socialsInfo.gmail}
               className="w-full mt-1 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-              onChange={(e) =>
-                handleInputChange("gmail", e.target.value, profileData.gmail)
-              }
+              onChange={(e) => handleInputChange("gmail", e.target.value)}
             />
           </div>
         </div>
+
+        <section className="pt-10">
+          <h3 className="text-zinc-900 text-xl font-bold">
+            Section visibility
+          </h3>
+
+          <div className="flex-between gap-5 p-6  mt-6">
+            <div className="flex flex-col gap-1">
+              <h4 className="text-zinc-900 text-base font-bold">
+                Social Links
+              </h4>
+
+              <p className="text-sm text-zinc-500">
+                Show your social links 
+              </p>
+            </div>
+
+            <Switch
+              defaultChecked={socialsInfo.socialLinks}
+              checked={socialsInfo.socialLinks}
+              onCheckedChange={() => {
+                handleInputChange("socialLinks", !socialsInfo.socialLinks);
+              }}
+            />
+          </div>
+        </section>
 
         <div className="w-full flex justify-end gap-3 text-sm font-semibold pt-10">
           <button
@@ -253,7 +268,8 @@ const Socials = ({ profileData }: IProfileFormProps) => {
                 dribble: profileData.dribble,
                 behance: profileData.behance,
                 youtube: profileData.youtube,
-                gmail: profileData.gmail
+                gmail: profileData.gmail,
+                socialLinks: profileData.socialLinks
               });
               setHasChanges(false);
             }}

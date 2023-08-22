@@ -30,7 +30,9 @@ const Profile = ({ profileData }: IProfileFormProps) => {
     profession: profileData.profession,
     dob: profileData.dob,
     gender: profileData.gender,
-    visibility: profileData.visibility,
+    followersAndFollowing: profileData.followersAndFollowing,
+    xp: profileData.xp,
+    achievementBadges: profileData.achievementBadges,
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,7 +50,18 @@ const Profile = ({ profileData }: IProfileFormProps) => {
         picture = imageResponse[0].url;
       }
     }
-    const { name, about, headline, location, profession, dob, gender, visibility } = profileInfo;
+    const {
+      name,
+      about,
+      headline,
+      location,
+      profession,
+      dob,
+      gender,
+      followersAndFollowing,
+      xp,
+      achievementBadges,
+    } = profileInfo;
     const profilePicture = picture ?? profileInfo.profilePicture;
     const id = profileData._id;
     await updateProfile({
@@ -60,7 +73,9 @@ const Profile = ({ profileData }: IProfileFormProps) => {
       profession,
       dob,
       gender,
-      visibility,
+      followersAndFollowing,
+      xp,
+      achievementBadges,
       id,
     });
 
@@ -68,26 +83,39 @@ const Profile = ({ profileData }: IProfileFormProps) => {
     setIsSubmitting(false);
     setHasChanges(false);
     startTransition(() => {
+      router.push("/");
       router.refresh();
     });
   };
 
-  const handleInputChange = (
-    name: string,
-    value: string,
-    originalValue: string
-  ) => {
-    value === originalValue ? setHasChanges(false) : setHasChanges(true);
-    setProfileInfo({
+  const handleInputChange = (name: string, value: string | boolean) => {
+    const newProfileInfo = {
       ...profileInfo,
       [name]: value,
-    });
+    };
+
+    // Check if there are any changes in the newProfileInfo compared to the original data
+    const hasChanges =
+      newProfileInfo.name !== profileData.name ||
+      newProfileInfo.headline !== profileData.headline ||
+      newProfileInfo.profilePicture !== profileData.profilePicture ||
+      newProfileInfo.location !== profileData.location ||
+      newProfileInfo.about !== profileData.about ||
+      newProfileInfo.profession !== profileData.profession ||
+      newProfileInfo.dob !== profileData.dob ||
+      newProfileInfo.gender !== profileData.gender ||
+      newProfileInfo.followersAndFollowing !==
+        profileData.followersAndFollowing ||
+      newProfileInfo.xp !== profileData.xp ||
+      newProfileInfo.achievementBadges !== profileData.achievementBadges;
+
+    setHasChanges(hasChanges);
+    setProfileInfo(newProfileInfo);
   };
 
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
-    fieldChange: string,
-    originalValue: string
+    fieldChange: string
   ) => {
     e.preventDefault();
 
@@ -105,7 +133,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
       fileReader.onload = async (event) => {
         const imageDataUrl = event.target?.result?.toString() ?? "";
 
-        handleInputChange(fieldChange, imageDataUrl, originalValue);
+        handleInputChange(fieldChange, imageDataUrl);
       };
 
       fileReader.readAsDataURL(file);
@@ -131,23 +159,16 @@ const Profile = ({ profileData }: IProfileFormProps) => {
                 type="file"
                 accept="image/*"
                 id="file-input"
-                onChange={(e) =>
-                  handleImage(e, "profilePicture", profileData.profilePicture)
-                }
+                onChange={(e) => handleImage(e, "profilePicture")}
                 className="hidden"
               />
             </label>
 
             <button
+              type="button"
               className="py-2 px-4 bg-zinc-100 rounded-lg text-zinc-900 text-sm font-semibold"
               onClick={() => {
-                profileData.profilePicture === "/assets/images/user.webp"
-                  ? setHasChanges(false)
-                  : setHasChanges(true);
-                setProfileInfo({
-                  ...profileInfo,
-                  profilePicture: "/assets/images/user.webp",
-                });
+                handleInputChange("profilePicture", "/assets/images/user.webp");
               }}
             >
               Delete
@@ -169,9 +190,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
             placeholder="Enter a name"
             value={profileInfo.name}
             className="w-full mt-1 mb-2 pt-3 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-            onChange={(e) =>
-              handleInputChange("name", e.target.value, profileData.name)
-            }
+            onChange={(e) => handleInputChange("name", e.target.value)}
           />
 
           <p className="text-sm text-zinc-500">
@@ -192,9 +211,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
             placeholder="Tell us about yourself..."
             value={profileInfo.about}
             className="w-full mt-1 mb-2 pt-3 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-            onChange={(e) =>
-              handleInputChange("about", e.target.value, profileData.about)
-            }
+            onChange={(e) => handleInputChange("about", e.target.value)}
           />
         </div>
 
@@ -212,13 +229,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
             placeholder="Enter a Headline"
             value={profileInfo.headline}
             className="w-full mt-1 pt-3 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-            onChange={(e) =>
-              handleInputChange(
-                "headline",
-                e.target.value,
-                profileData.headline
-              )
-            }
+            onChange={(e) => handleInputChange("headline", e.target.value)}
           />
         </div>
 
@@ -236,13 +247,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
             placeholder="Enter a Location"
             value={profileInfo.location}
             className="w-full mt-1 pt-3 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-            onChange={(e) =>
-              handleInputChange(
-                "location",
-                e.target.value,
-                profileData.location
-              )
-            }
+            onChange={(e) => handleInputChange("location", e.target.value)}
           />
         </div>
 
@@ -260,13 +265,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
             placeholder="Enter a Profession"
             value={profileInfo.profession}
             className="w-full mt-1 pt-3 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-            onChange={(e) =>
-              handleInputChange(
-                "profession",
-                e.target.value,
-                profileData.profession
-              )
-            }
+            onChange={(e) => handleInputChange("profession", e.target.value)}
           />
         </div>
 
@@ -283,13 +282,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
             placeholder="DD/MM/YY"
             value={new Date(profileInfo.dob).toISOString().split("T")[0]}
             className="w-full mt-1 pt-3 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-            onChange={(e) =>
-              handleInputChange(
-                "dob",
-                e.target.value,
-                profileData.dob.toString()
-              )
-            }
+            onChange={(e) => handleInputChange("dob", e.target.value)}
           />
         </div>
 
@@ -306,9 +299,7 @@ const Profile = ({ profileData }: IProfileFormProps) => {
             placeholder="Enter your gender here..."
             value={profileInfo.gender}
             className="w-full mt-1 pt-3 px-3 py-[14px] text-sm text-zinc-900 outline-none placeholder:text-zinc-400 border border-zinc-200 rounded-lg focus:border-2 focus:border-primary-600"
-            onChange={(e) =>
-              handleInputChange("gender", e.target.value, profileData.gender)
-            }
+            onChange={(e) => handleInputChange("gender", e.target.value)}
           />
         </div>
 
@@ -334,33 +325,13 @@ const Profile = ({ profileData }: IProfileFormProps) => {
               </div>
 
               <Switch
-                defaultChecked={profileInfo.visibility.includes(
-                  "followers and following"
-                )}
-                checked={profileInfo.visibility.includes(
-                  "followers and following"
-                )}
+                defaultChecked={profileInfo.followersAndFollowing}
+                checked={profileInfo.followersAndFollowing}
                 onCheckedChange={() => {
-                  if (
-                    profileInfo.visibility.includes("followers and following")
-                  ) {
-                    setProfileInfo({
-                      ...profileInfo,
-                      visibility: profileInfo.visibility.filter(
-                        (field) => field !== "followers and following"
-                      ),
-                    });
-                    setHasChanges(true);
-                  } else {
-                    setProfileInfo({
-                      ...profileInfo,
-                      visibility: [
-                        ...profileInfo.visibility,
-                        "followers and following",
-                      ],
-                    });
-                    setHasChanges(true);
-                  }
+                  handleInputChange(
+                    "followersAndFollowing",
+                    !profileInfo.followersAndFollowing
+                  );
                 }}
               />
             </div>
@@ -375,22 +346,10 @@ const Profile = ({ profileData }: IProfileFormProps) => {
               </div>
 
               <Switch
-                defaultChecked={profileInfo.visibility.includes("xp")}
-                checked={profileInfo.visibility.includes("xp")}
-                onCheckedChange={() => {
-                  if (profileInfo.visibility.includes("xp")) {
-                    setProfileInfo({
-                      ...profileInfo,
-                      visibility: profileInfo.visibility.filter(
-                        (field) => field !== "xp"
-                      ),
-                    });
-                  } else {
-                    setProfileInfo({
-                      ...profileInfo,
-                      visibility: [...profileInfo.visibility, "xp"],
-                    });
-                  }
+                defaultChecked={profileInfo.xp}
+                checked={profileInfo.xp}
+                onCheckedChange={(e) => {
+                  handleInputChange("xp", !profileInfo.xp);
                 }}
               />
             </div>
@@ -407,27 +366,13 @@ const Profile = ({ profileData }: IProfileFormProps) => {
               </div>
 
               <Switch
-                defaultChecked={profileInfo.visibility.includes(
-                  "achievement badges"
-                )}
-                checked={profileInfo.visibility.includes("achievement badges")}
+                defaultChecked={profileInfo.achievementBadges}
+                checked={profileInfo.achievementBadges}
                 onCheckedChange={() => {
-                  if (profileInfo.visibility.includes("achievement badges")) {
-                    setProfileInfo({
-                      ...profileInfo,
-                      visibility: profileInfo.visibility.filter(
-                        (field) => field !== "achievement badges"
-                      ),
-                    });
-                  } else {
-                    setProfileInfo({
-                      ...profileInfo,
-                      visibility: [
-                        ...profileInfo.visibility,
-                        "achievement badges",
-                      ],
-                    });
-                  }
+                  handleInputChange(
+                    "achievementBadges",
+                    !profileInfo.achievementBadges
+                  );
                 }}
               />
             </div>
@@ -448,7 +393,9 @@ const Profile = ({ profileData }: IProfileFormProps) => {
                 profession: profileData.profession,
                 dob: profileData.dob,
                 gender: profileData.gender,
-                visibility: profileData.visibility,
+                followersAndFollowing: profileData.followersAndFollowing,
+                xp: profileData.xp,
+                achievementBadges: profileData.achievementBadges,
               });
               setHasChanges(false);
             }}

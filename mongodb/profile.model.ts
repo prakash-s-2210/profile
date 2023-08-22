@@ -20,7 +20,10 @@ const profileSchema = new Schema<IProfile>({
   behance: String,
   youtube: String,
   gmail: String,
-  visibility: [String],
+  followersAndFollowing: Boolean,
+  xp: Boolean,
+  achievementBadges: Boolean,
+  socialLinks: Boolean,
   projects: [
     {
       type: Schema.Types.ObjectId,

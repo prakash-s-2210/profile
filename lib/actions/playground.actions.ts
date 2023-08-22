@@ -7,7 +7,7 @@ export async function createPlayground(
   id: Types.ObjectId
 ) {
   try {
-    const res = await fetch("http://localhost:3000/api/playground/create", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/playground/create`, {
       method: "POST",
       body: JSON.stringify({
         title,
@@ -28,7 +28,7 @@ export async function editPlayground(
   id: Types.ObjectId
 ) {
   try {
-    const res = await fetch(`http://localhost:3000/api/playground/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/playground/${id}`, {
       method: "PATCH",
       body: JSON.stringify({
         title,

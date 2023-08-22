@@ -9,7 +9,7 @@ export async function createProject(
     id: Types.ObjectId
   ) {
     try {
-      const res = await fetch("http://localhost:3000/api/project/create", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/project/create`, {
         method: "POST",
         body: JSON.stringify({
           title,
@@ -34,7 +34,7 @@ export async function createProject(
     id: Types.ObjectId
   ) {
     try {
-      const res = await fetch(`http://localhost:3000/api/project/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/project/${id}`, {
         method: "PATCH",
         body: JSON.stringify({
           title,

@@ -17,7 +17,7 @@ const Portfolio = ({ profileData }: IPortfolioProps) => {
 
   return (
     <div className="max-md:mx-5 flex flex-col gap-10 mt-10">
-      <Stats />
+      <Stats profileData = {profileData} />
 
       <Projects id={profileData._id} />
 

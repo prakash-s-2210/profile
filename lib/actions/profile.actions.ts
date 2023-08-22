@@ -2,7 +2,7 @@
 
 export const getProfileData = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/profile", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/profile`, {
       cache: "no-store",
     });
     if (res.ok) {
@@ -14,14 +14,3 @@ export const getProfileData = async () => {
     throw new Error("Failed to fetch profile information");
   }
 };
-
-export async function test() {
-  try {
-    const res = await fetch("http://localhost:3000/api/projects", {
-      method: "POST",
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-}

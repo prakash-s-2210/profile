@@ -28,7 +28,10 @@ export interface IProfile {
   behance: string;
   youtube: string;
   gmail: string;
-  visibility: string[];
+  followersAndFollowing: boolean;
+  xp: boolean;
+  achievementBadges: boolean;
+  socialLinks: boolean;
   projects: Array<IProject>;
   playgrounds: Array<IPlayground>;
   certificates: Array<ICertificates>;
@@ -53,8 +56,8 @@ export interface IProject {
   title: string;
   technology: string;
   githubLink: string;
-  createdAt: Date,
-  updatedAt: Date,
+  createdAt: Date;
+  updatedAt: Date;
   picture: string;
   visibility: boolean;
 }
@@ -101,7 +104,9 @@ export interface IUpdateProfileParams {
   profession: string;
   dob: string | Date;
   gender: string;
-  visibility: string[];
+  followersAndFollowing: boolean;
+  xp: boolean;
+  achievementBadges: boolean;
   id: Types.ObjectId;
 }
 
@@ -114,12 +119,20 @@ export interface IUpdateSocialsParams {
   behance: string;
   youtube: string;
   gmail: string;
+  socialLinks: boolean;
   id: Types.ObjectId;
 }
 
 export interface IUpdatePortfolioParams {
-  projects: IProject[],
-  playgrounds:IPlayground[],
+  projects: IProject[];
+  playgrounds: IPlayground[];
+}
+
+export interface IUpdateResumeParams {
+  techStacks: string[];
+  interests: string[];
+  languages: string[];
+  id: Types.ObjectId;
 }
 
 export interface stats {
@@ -133,10 +146,10 @@ export interface tech {
   label: string;
 }
 
-export interface ProfileProps{
+export interface ProfileProps {
   searchParams: {
-    query: string,
-  }
+    query: string;
+  };
 }
 
 export interface TabProps {

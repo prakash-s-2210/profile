@@ -5,6 +5,8 @@ import { connectToDB } from "@/lib/mongoose";
 import Project from "@/mongodb/project.model";
 import Playground from "@/mongodb/playground.model";
 import Certificate from "@/mongodb/certificate.model";
+import WorkExperience from "@/mongodb/workExperience.model";
+import Education from "@/mongodb/education.model";
 
 export const GET = async (request: Request) => {
   try {
@@ -21,6 +23,14 @@ export const GET = async (request: Request) => {
       .populate({
         path: "certificates",
         model: Certificate,
+      })
+      .populate({
+        path: "workExperience",
+        model: WorkExperience,
+      })
+      .populate({
+        path: "education",
+        model: Education,
       })
       .exec();
     return NextResponse.json(profileData, { status: 200 });

@@ -48,18 +48,18 @@ const Modal = ({
       {openModal && (
         <div
           ref={overlay}
-          className="flex-center fixed inset-0 z-30 mx-auto max-h-screen overflow-auto bg-black/50 p-5"
+          className="flex-center fixed inset-0 z-30 max-h-screen mx-auto bg-black/50 p-5"
           onClick={onClick}
         >
           <div
             ref={wrapper}
-            className="absolute top-1/2  -translate-y-1/2  p-4 bg-white rounded-md max-w-xl m-5 overflow-auto"
+            className="absolute top-5 bottom-5 m-4  p-4 bg-white rounded-md max-w-xl max-h-screen overflow-auto"
           >
             {children}
           </div>
 
           <Image
-            src="/assets/icons/close.svg"
+            src="/assets/icons/close-red.svg"
             alt="close"
             width={48}
             height={48}

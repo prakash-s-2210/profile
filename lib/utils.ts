@@ -51,12 +51,41 @@ export const monthYearFormat = (date: Date) => {
   return `${month} ${year}`;
 };
 
-
 // Certificate Input type month conversion
 
 export const convertMonthYearFormat = (date: Date) => {
-    const year = new Date(date).getUTCFullYear();
-    const month = (new Date(date).getUTCMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
-  
-    return `${year}-${month}`;
+  const year = new Date(date).getUTCFullYear();
+  const month = (new Date(date).getUTCMonth() + 1).toString().padStart(2, "0"); // Adding 1 because months are zero-based
+
+  return `${year}-${month}`;
+};
+
+// work experience month year format
+export function formatDateToMonthYear(dateString: Date | string) {
+  const options = {
+    year: "numeric",
+    month: "long",
+  } as Intl.DateTimeFormatOptions;
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", options);
+}
+
+// Check array elements are equal
+export function areArraysEqual(arr1: string[], arr2: string[]):boolean {
+  const sortedArr1 = arr1.slice().sort();
+  const sortedArr2 = arr2.slice().sort();
+
+  if (sortedArr1.length !== sortedArr2.length) {
+    return true;
+  }
+
+  for (let i = 0; i < sortedArr1.length; i++) {
+    console.log(sortedArr1[i], sortedArr2[i])
+
+    if (sortedArr1[i] !== sortedArr2[i]) {
+      return true;
+    }
+  }
+
+  return false;
 }

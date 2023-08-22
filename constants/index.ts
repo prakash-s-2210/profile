@@ -42,230 +42,67 @@ export const leftSidebar: {
 
 export const technologies: tech[] = [
   {
-    imgUrl: "/assets/icons/html-css.svg",
-    label: "HTML/CSS",
-  },
-  {
     imgUrl: "/assets/icons/react.svg",
     label: "React",
-  },
-  {
-    imgUrl: "/assets/icons/vue.svg",
-    label: "Vue 3",
-  },
-  {
-    imgUrl: "/assets/icons/solidity.png",
-    label: "Solidity",
-  },
-  {
-    imgUrl: "/assets/icons/python.svg",
-    label: "Python",
-  },
-  {
-    imgUrl: "/assets/icons/java.svg",
-    label: "Java",
-  },
-  {
-    imgUrl: "/assets/icons/golang.svg",
-    label: "Golang",
-  },
-  {
-    imgUrl: "/assets/icons/node.svg",
-    label: "Node.js",
-  },
-  {
-    imgUrl: "/assets/icons/c++.svg",
-    label: "C++",
-  },
-  {
-    imgUrl: "/assets/icons/C.svg",
-    label: "C",
-  },
-  {
-    imgUrl: "/assets/icons/nextjs.svg",
-    label: "Next.js",
-  },
-  {
-    imgUrl: "/assets/icons/bun.png",
-    label: "Bun",
-  },
-  {
-    imgUrl: "/assets/icons/php.svg",
-    label: "PHP",
-  },
-  {
-    imgUrl: "/assets/icons/rust.svg",
-    label: "Rust",
-  },
-  {
-    imgUrl: "/assets/icons/kotlin.svg",
-    label: "Kotlin",
-  },
-  {
-    imgUrl: "/assets/icons/swift.svg",
-    label: "Swift",
-  },
-];
-
-export const certificateIconChoices: tech[] = [
-  {
-    imgUrl: "/assets/icons/html-css.svg",
-    label: "HTML/CSS",
-  },
-  {
-    imgUrl: "/assets/icons/react.svg",
-    label: "React",
-  },
-  {
-    imgUrl: "/assets/icons/vue.svg",
-    label: "Vue 3",
-  },
-  {
-    imgUrl: "/assets/icons/solidity.png",
-    label: "Solidity",
-  },
-  {
-    imgUrl: "/assets/icons/python.svg",
-    label: "Python",
-  },
-  {
-    imgUrl: "/assets/icons/java.svg",
-    label: "Java",
-  },
-  {
-    imgUrl: "/assets/icons/golang.svg",
-    label: "Golang",
-  },
-  {
-    imgUrl: "/assets/icons/node.svg",
-    label: "Node.js",
-  },
-  {
-    imgUrl: "/assets/icons/c++.svg",
-    label: "C++",
-  },
-  {
-    imgUrl: "/assets/icons/C.svg",
-    label: "C",
-  },
-  {
-    imgUrl: "/assets/icons/nextjs.svg",
-    label: "Next.js",
-  },
-  {
-    imgUrl: "/assets/icons/bun.png",
-    label: "Bun",
-  },
-  {
-    imgUrl: "/assets/icons/php.svg",
-    label: "PHP",
-  },
-  {
-    imgUrl: "/assets/icons/rust.svg",
-    label: "Rust",
-  },
-  {
-    imgUrl: "/assets/icons/kotlin.svg",
-    label: "Kotlin",
-  },
-  {
-    imgUrl: "/assets/icons/swift.svg",
-    label: "Swift",
-  },
-  {
-    imgUrl: "/assets/icons/js.svg",
-    label: "Javascript",
-  },
-  {
-    imgUrl: "/assets/icons/csharp.svg",
-    label: "C#",
-  },
-  {
-    imgUrl: "/assets/icons/ruby.svg",
-    label: "Ruby",
-  },
-  {
-    imgUrl: "/assets/icons/ts.svg",
-    label: "Typescript",
-  },
-  {
-    imgUrl: "/assets/icons/ruby-on-rails.svg",
-    label: "Ruby on Rails",
   },
   {
     imgUrl: "/assets/icons/angular.svg",
     label: "Angular",
   },
   {
-    imgUrl: "/assets/icons/threejs.svg",
-    label: "ThreeJS",
-  },
-  {
-    imgUrl: "/assets/icons/jquery.svg",
-    label: "JQuery",
-  },
-  {
-    imgUrl: "/assets/icons/bootstrap.svg",
-    label: "Bootstrap",
-  },
-  {
-    imgUrl: "/assets/icons/material-ui.svg",
-    label: "Material-UI",
-  },
-  {
-    imgUrl: "/assets/icons/mysql.svg",
-    label: "MySQL",
-  },
-  {
-    imgUrl: "/assets/icons/tailwindcss.svg",
-    label: "TailwindCSS",
-  },
-  {
-    imgUrl: "/assets/icons/postgresql.svg",
-    label: "PostgreSQL",
-  },
-  {
-    imgUrl: "/assets/icons/mongodb.svg",
-    label: "MongoDB",
-  },
-  {
-    imgUrl: "/assets/icons/aws.svg",
-    label: "AWS",
-  },
-  {
-    imgUrl: "/assets/icons/azure.svg",
-    label: "Azure",
-  },
-  {
-    imgUrl: "/assets/icons/docker.svg",
-    label: "Docker",
-  },
-  {
-    imgUrl: "/assets/icons/kubernetes.svg",
-    label: "Kubernetes",
+    imgUrl: "/assets/icons/css.svg",
+    label: "CSS 3",
   },
   {
     imgUrl: "/assets/icons/git.svg",
     label: "Git",
   },
   {
-    imgUrl: "/assets/icons/github.svg",
-    label: "GitHub",
+    imgUrl: "/assets/icons/hardhat.webp",
+    label: "Hardhat",
   },
   {
-    imgUrl: "/assets/icons/gitlab.svg",
-    label: "GitLab",
+    imgUrl: "/assets/icons/html.svg",
+    label: "HTML 5",
   },
   {
-    imgUrl: "/assets/icons/android.svg",
-    label: "Android",
+    imgUrl: "/assets/icons/js.svg",
+    label: "Javascript",
   },
   {
-    imgUrl: "/assets/icons/ios.svg",
-    label: "iOS",
+    imgUrl: "/assets/icons/mongodb.svg",
+    label: "MongoDB",
   },
   {
-    imgUrl: "/assets/icons/flutter.svg",
-    label: "Flutter",
+    imgUrl: "/assets/icons/mysql.svg",
+    label: "MySQL",
+  },
+  {
+    imgUrl: "/assets/icons/nextjs.svg",
+    label: "Next.JS",
+  },
+  {
+    imgUrl: "/assets/icons/node.svg",
+    label: "Node.JS",
+  },
+  {
+    imgUrl: "/assets/icons/nuxt.webp",
+    label: "Nuxt.JS",
+  },
+  {
+    imgUrl: "/assets/icons/php.svg",
+    label: "PHP",
+  },
+  {
+    imgUrl: "/assets/icons/solidity.png",
+    label: "Solidity",
+  },
+  {
+    imgUrl: "/assets/icons/truffle.webp",
+    label: "Truffle",
+  },
+  {
+    imgUrl: "/assets/icons/vue.svg",
+    label: "Vue",
   },
 ];

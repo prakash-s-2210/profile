@@ -4,7 +4,14 @@ import { connectToDB } from "@/lib/mongoose";
 import Playground from "@/mongodb/playground.model";
 import Profile from "@/mongodb/profile.model";
 import Project from "@/mongodb/project.model";
-import { IUpdatePortfolioParams, IUpdateProfileParams, IUpdateSocialsParams } from "@/types";
+import {
+  IUpdatePortfolioParams,
+  IUpdateProfileParams,
+  IUpdateSocialsParams,
+  IUpdateResumeParams,
+} from "@/types";
+
+// Update Profile Form
 
 export async function updateProfile({
   name,
@@ -15,7 +22,9 @@ export async function updateProfile({
   profession,
   dob,
   gender,
-  visibility,
+  followersAndFollowing,
+  xp,
+  achievementBadges,
   id,
 }: IUpdateProfileParams) {
   try {
@@ -23,7 +32,19 @@ export async function updateProfile({
 
     const profileUpdated = await Profile.findOneAndUpdate(
       { _id: id },
-      { name, profilePicture, headline, location, about, profession, dob, gender, visibility }
+      {
+        name,
+        profilePicture,
+        headline,
+        location,
+        about,
+        profession,
+        dob,
+        gender,
+        followersAndFollowing,
+        xp,
+        achievementBadges,
+      }
     ).exec();
 
     if (!profileUpdated) {
@@ -36,6 +57,8 @@ export async function updateProfile({
     throw error;
   }
 }
+
+// Update Socials form
 
 export async function updateSocials({
   github,
@@ -46,6 +69,7 @@ export async function updateSocials({
   behance,
   youtube,
   gmail,
+  socialLinks,
   id,
 }: IUpdateSocialsParams) {
   try {
@@ -53,7 +77,17 @@ export async function updateSocials({
 
     const profileUpdated = await Profile.findOneAndUpdate(
       { _id: id },
-      { github, linkedin, facebook, instagram, dribble, behance, youtube, gmail }
+      {
+        github,
+        linkedin,
+        facebook,
+        instagram,
+        dribble,
+        behance,
+        youtube,
+        gmail,
+        socialLinks,
+      }
     ).exec();
 
     if (!profileUpdated) {
@@ -67,9 +101,11 @@ export async function updateSocials({
   }
 }
 
+// Update portfolio form
+
 export async function updatePortfolio({
   projects,
-  playgrounds
+  playgrounds,
 }: IUpdatePortfolioParams) {
   try {
     connectToDB();
@@ -87,7 +123,38 @@ export async function updatePortfolio({
 
       await Playground.updateOne(filter, update);
     }
+  } catch (error) {
+    console.error("Error updating profile information:", error);
+    throw error;
+  }
+}
 
+// Update resume form
+
+export async function updateResume({
+  techStacks,
+  interests,
+  languages,
+  id,
+}: IUpdateResumeParams) {
+  try {
+    connectToDB();
+
+    const profileUpdated = await Profile.findOneAndUpdate(
+      { _id: id },
+      {
+        techStacks,
+        interests,
+        languages,
+        id,
+      }
+    ).exec();
+
+    if (!profileUpdated) {
+      throw new Error("Profile Information not found");
+    }
+
+    return profileUpdated;
   } catch (error) {
     console.error("Error updating profile information:", error);
     throw error;

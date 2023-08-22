@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { startTransition, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 
 import { IProfile, IProject } from "@/types";
 import { timeAgo } from "@/lib/utils";
@@ -16,7 +16,8 @@ interface IPortfolioFormProps {
 const Portfolio = ({ profileData }: IPortfolioFormProps) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [projectChanges, setProjectChanges] = useState(false);
+  const [playgroundChanges, setPlaygroundChanges] = useState(false);
 
   const [portfolioInfo, setPortfolioInfo] = useState({
     projects: profileData.projects,
@@ -37,39 +38,69 @@ const Portfolio = ({ profileData }: IPortfolioFormProps) => {
     ? portfolioInfo.playgrounds
     : portfolioInfo.playgrounds.slice(0, 4);
 
+  useEffect(() => {
+    let anyProjectChanged = portfolioInfo.projects.some(
+      (project, index) =>
+        project.visibility !== profileData.projects[index].visibility
+    );
+
+    let anyPlaygroundChanged = portfolioInfo.playgrounds.some(
+      (playground, index) =>
+        playground.visibility !== profileData.playgrounds[index].visibility
+    );
+
+    setProjectChanges(anyProjectChanged);
+    setPlaygroundChanges(anyPlaygroundChanged);
+  }, [
+    portfolioInfo.projects,
+    portfolioInfo.playgrounds,
+    profileData.projects,
+    profileData.playgrounds,
+  ]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const { projects,playgrounds } = portfolioInfo;
+    const { projects, playgrounds } = portfolioInfo;
     const id = profileData._id;
     await updatePortfolio({
-     projects,
-     playgrounds,
+      projects,
+      playgrounds,
     });
     setIsSubmitting(false);
-    setHasChanges(false);
+    setProjectChanges(false);
+    setPlaygroundChanges(false);
     startTransition(() => {
+      router.push("/");
       router.refresh();
     });
   };
 
   const handleVisibilityToggle = (type: string, id: Types.ObjectId) => {
-    setHasChanges(true);
     const arrayType = type as keyof typeof portfolioInfo;
-    // Create a copy of the original array
     const updatedArray = [...portfolioInfo[arrayType]];
 
-    // Find the element by id in the copied array
     const elementIndex = updatedArray.findIndex((item) => item._id === id);
 
-    // Toggle the visibility property of the found element
-    updatedArray[elementIndex].visibility =
-      !updatedArray[elementIndex].visibility;
+    const previousVisibility = updatedArray[elementIndex].visibility;
 
-    // Update the state with the modified array
+    updatedArray[elementIndex] = {
+      ...updatedArray[elementIndex],
+      visibility: !previousVisibility,
+    };
+    // Check if visibility changed for the current element
+    if (
+      updatedArray[elementIndex].visibility !==
+      profileData[arrayType][elementIndex].visibility
+    ) {
+      arrayType === "projects"
+        ? setProjectChanges(true)
+        : setPlaygroundChanges(true);
+    }
+
     setPortfolioInfo((prevState) => ({
       ...prevState,
-      [type]: updatedArray,
+      [arrayType]: updatedArray,
     }));
   };
 
@@ -91,6 +122,8 @@ const Portfolio = ({ profileData }: IPortfolioFormProps) => {
               </p>
             )}
           </div>
+
+          {portfolioInfo.playgrounds.length > 0 && <p className="text-zinc-500 font-semibold">{`Choose playgrounds to showcase on your profile by clicking the playgrounds listed.`}</p>}
 
           <div className="w-fit grid grid-cols-1 md:grid-cols-2 gap-5">
             {visiblePlaygrounds.map((playground) => {
@@ -163,6 +196,8 @@ const Portfolio = ({ profileData }: IPortfolioFormProps) => {
             )}
           </div>
 
+          {portfolioInfo.projects.length > 0 && <p className="text-zinc-500 font-semibold">{`Choose projects to showcase on your profile by clicking the projects listed.`}</p>}
+          
           <div className="w-fit grid grid-cols-1 md:grid-cols-2 gap-5">
             {visibleProjects.map((project) => {
               const [label, imgSrc] = project.technology.split("|");
@@ -223,7 +258,8 @@ const Portfolio = ({ profileData }: IPortfolioFormProps) => {
                 projects: profileData.projects,
                 playgrounds: profileData.playgrounds,
               });
-              setHasChanges(false);
+              setProjectChanges(false);
+              setPlaygroundChanges(false);
             }}
           >
             cancel
@@ -232,7 +268,9 @@ const Portfolio = ({ profileData }: IPortfolioFormProps) => {
           <button
             type="submit"
             className={`${
-              hasChanges ? "opacity-100" : "pointer-events-none opacity-50"
+              playgroundChanges || projectChanges
+                ? "opacity-100"
+                : "pointer-events-none opacity-50"
             } px-4 py-2 bg-primary-600 rounded-lg text-white`}
           >
             {isSubmitting ? "Saving..." : "Save changes"}

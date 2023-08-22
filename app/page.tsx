@@ -29,7 +29,7 @@ const Home = async ({ searchParams }: ProfileProps) => {
       <Navbar profilePicture = {profileData.profilePicture} query={query} />
 
       <main className="py-11 max-w-[738px] mx-auto flex flex-col">
-        <UserProfileSection profileData={profileData} />
+        <UserProfileSection profileData={profileData} query={query} />
 
         <Tab query={query} />
 

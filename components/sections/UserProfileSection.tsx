@@ -3,11 +3,12 @@ import Link from "next/link";
 
 import { IProfile } from "@/types";
 
-interface IUserProfileProps{
-    profileData: IProfile
+interface IUserProfileProps {
+  profileData: IProfile;
+  query: string;
 }
 
-const UserProfileSection = ({profileData}: IUserProfileProps) => {
+const UserProfileSection = ({ profileData, query }: IUserProfileProps) => {
   return (
     <section className="max-sm:mx-5 flex flex-col gap-6 sm:border max-sm:border-b border-zinc-200 sm:rounded-2xl">
       <div className="relative">
@@ -33,7 +34,7 @@ const UserProfileSection = ({profileData}: IUserProfileProps) => {
         </div>
       </div>
 
-      <div className="relative flex md:flex-row flex-col gap-6 max-md:px-5">
+      <div className="relative flex md:flex-row flex-col gap-6 max-md:px-5 pr-8">
         <div className="relative bottom-[70px] md:left-5 w-fit h-fit z-20">
           <Image
             src={profileData.profilePicture}
@@ -52,7 +53,12 @@ const UserProfileSection = ({profileData}: IUserProfileProps) => {
           />
         </div>
 
-        <Link href="edit-profile" className="py-2 px-4 border border-blue-400 rounded-md text-sm text-blue-400 hover:bg-gray-100 absolute top-0 right-4">Edit Profile</Link>
+        <Link
+          href="edit-profile"
+          className="py-2 px-4 border border-blue-400 rounded-md text-sm text-blue-400 hover:bg-gray-100 absolute top-0 right-4"
+        >
+          Edit Profile
+        </Link>
 
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-2">
@@ -85,19 +91,167 @@ const UserProfileSection = ({profileData}: IUserProfileProps) => {
           </div>
 
           <div className="flex gap-3 flex-wrap">
-            {profileData?.techStacks.map((tech) => (
-              <>
+            {profileData?.techStacks.map((tech) => {
+              const [label, imgUrl] = tech.split("|");
+              return (
                 <p
                   key={tech}
                   className="py-2 px-3 rounded-lg bg-zinc-100 text-xs font-semibold text-zinc-900"
                 >
-                  {tech}
+                  {label}
                 </p>
-              </>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="border-t border-t-[#F4F4F5] pt-8"></div>
+          <div className="flex-between flex-wrap gap-5 border-t border-t-[#F4F4F5] py-8">
+            <div className="flex flex-wrap gap-4">
+              {profileData.gmail && (
+                <Link
+                  href={profileData.gmail}
+                  target="_blank"
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/gmail.svg"
+                    alt="gmail"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+
+              {profileData.instagram && (
+                <Link
+                  href={profileData.instagram}
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/instagram.svg"
+                    alt="instagram"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+
+              {profileData.facebook && (
+                <Link
+                  href={profileData.facebook}
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/facebook.svg"
+                    alt="facebook"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+
+              {profileData.linkedin && (
+                <Link
+                  href={profileData.linkedin}
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/linked-in.svg"
+                    alt="linked-in"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+
+              {profileData.youtube && (
+                <Link
+                  href={profileData.youtube}
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/youtube.svg"
+                    alt="youtube"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+
+              {profileData.github && (
+                <Link
+                  href={profileData.github}
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/github.svg"
+                    alt="github"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+
+              {profileData.dribble && (
+                <Link
+                  href={profileData.dribble}
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/dribble.svg"
+                    alt="dribble"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+
+              {profileData.behance && (
+                <Link
+                  href={profileData.behance}
+                  className="p-2 border border-zinc-200 rounded-lg cursor-pointer"
+                >
+                  <Image
+                    src="/assets/icons/behance.svg"
+                    alt="behance"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+              )}
+            </div>
+
+            {query === "portfolio" || query === undefined ? (
+              <div className="flex gap-4">
+                <div className="p-3 bg-zinc-100 rounded-lg">
+                  <Image
+                    src="/assets/icons/saved.svg"
+                    alt="saved"
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                  />
+                </div>
+
+                <button className="py-2 px-4 bg-primary-600 rounded-lg text-sm font-semibold text-white">
+                  Contact
+                </button>
+              </div>
+            ) : (
+              profileData.followersAndFollowing && (
+                <button className="py-2 px-4 bg-zinc-100 rounded-l text-sm text-zinc-900 font-semibold">
+                  Follow
+                </button>
+              )
+            )}
+          </div>
         </div>
       </div>
     </section>

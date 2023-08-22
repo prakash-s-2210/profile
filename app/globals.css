@@ -97,3 +97,19 @@
     0px 3.1666665077209473px 25.333332061767578px rgba(87, 70, 244, 0.5)
   );
 }
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
