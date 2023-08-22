@@ -1,7 +1,7 @@
-import { ICertificates } from "@/types";
+import { ICertificate } from "@/types";
 import mongoose, { Schema, model, models } from "mongoose";
 
-const certificateSchema = new Schema<ICertificates>({
+const certificateSchema = new Schema<ICertificate>({
   title: String,
   technology: String,
   issuedDate: Date,
