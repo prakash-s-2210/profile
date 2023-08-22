@@ -10,6 +10,7 @@ import Education from "@/mongodb/education.model";
 
 export const GET = async (request: Request) => {
   try {
+    console.log("I am here");
     await connectToDB();
     const profileData = await Profile.find({})
       .populate({

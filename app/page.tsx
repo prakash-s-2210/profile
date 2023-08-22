@@ -7,11 +7,12 @@ import Resume from "@/components/sections/resume/Resume";
 import { getCountries } from "@/lib/actions/countriesFlag.actions";
 import Navbar from "@/components/shared/Navbar";
 
+export const revalidate = 0;
 const Home = async ({ searchParams }: ProfileProps) => {
   const query = searchParams.query;
   const result: IProfile[] = await getProfileData();
   const profileData: IProfile = result[0];
-
+  console.log(profileData.projects[1]);
   const countries = await getCountries();
 
   const filteredLanguagesWithImages = profileData.languages

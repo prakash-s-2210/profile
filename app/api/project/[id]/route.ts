@@ -21,7 +21,7 @@ export const PATCH = async (
     });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error updating Project" },
+      { message: error },
       { status: 500 }
     );
   }
