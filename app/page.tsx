@@ -7,7 +7,6 @@ import Resume from "@/components/sections/resume/Resume";
 import { getCountries } from "@/lib/actions/countriesFlag.actions";
 import Navbar from "@/components/shared/Navbar";
 
-export const revalidate = 0;
 const Home = async ({ searchParams }: ProfileProps) => {
   const query = searchParams.query;
   const result: IProfile[] = await getProfileData();
