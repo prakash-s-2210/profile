@@ -1,5 +1,5 @@
 import Profile from "@/components/edit-form/Profile";
-import { getProfileData } from "@/lib/actions/profile.actions";
+import { getProfileData } from "@/lib/actions/profile/profile.actions";
 import { IProfile, ProfileProps } from "@/types";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import Navbar from "@/components/shared/Navbar";

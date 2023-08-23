@@ -9,7 +9,7 @@ import { useState, useTransition } from "react";
 import Modal from "../shared/Modal";
 import { IEducation } from "@/types";
 import { Checkbox } from "../shadcn-ui/checkbox";
-import { createEducation, editEducation } from "@/lib/actions/education.actions";
+import { createEducation, editEducation } from "@/lib/actions/edit-form/education.actions";
 
 
 interface IEducationModalProps {
@@ -165,8 +165,8 @@ const EducationModal = ({
               <div className="flex items-center gap-3">
                 <Checkbox
                   id="present"
-                  checked={educationData.present as boolean}
-                  defaultChecked={educationData.present as boolean}
+                  checked={educationData.present}
+                  defaultChecked={educationData.present}
                   onCheckedChange={(e) => {
                     handleInputChange("present", !educationData.present);
                   }}

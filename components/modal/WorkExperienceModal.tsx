@@ -12,7 +12,7 @@ import { Checkbox } from "../shadcn-ui/checkbox";
 import {
   createWorkExperience,
   editWorkExperience,
-} from "@/lib/actions/workExperience.actions";
+} from "@/lib/actions/edit-form/workExperience.actions";
 
 interface IWorkExperienceModalProps {
   openModal: boolean;

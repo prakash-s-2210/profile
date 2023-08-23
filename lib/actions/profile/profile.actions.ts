@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+// Get Profile Information
+"use server";
 
 import Profile from "@/mongodb/profile.model";
 import { connectToDB } from "@/lib/mongoose";
@@ -8,7 +9,7 @@ import Certificate from "@/mongodb/certificate.model";
 import WorkExperience from "@/mongodb/workExperience.model";
 import Education from "@/mongodb/education.model";
 
-export const GET = async (request: Request) => {
+export const getProfileData = async () => {
   try {
     await connectToDB();
     const profileData = await Profile.find({})
@@ -32,13 +33,12 @@ export const GET = async (request: Request) => {
         path: "education",
         model: Education,
       })
+      .limit(1)
       .exec();
-    return NextResponse.json(profileData, { status: 200 });
+    console.log(profileData);
+    return JSON.parse(JSON.stringify(profileData));
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { message: "Failed to fetch all Profile Information" },
-      { status: 500 }
-    );
+    throw error;
   }
 };

@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn-ui/select";
-import { createProject, editProject } from "@/lib/actions/project.actions";
+import { createProject, editProject } from "@/lib/actions/profile/project.actions";
 import { technologies } from "@/constants";
 import { IProject, tech } from "@/types";
 import { isBase64Image } from "@/lib/utils";

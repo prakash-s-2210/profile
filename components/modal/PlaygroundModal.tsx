@@ -23,7 +23,7 @@ import { IPlayground, tech } from "@/types";
 import {
   createPlayground,
   editPlayground,
-} from "@/lib/actions/playground.actions";
+} from "@/lib/actions/profile/playground.actions";
 
 interface IPlaygroundModalProps {
   openModal: boolean;

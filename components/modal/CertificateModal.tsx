@@ -20,7 +20,7 @@ import {
 
 import { technologies } from "@/constants";
 import { ICertificate, tech } from "@/types";
-import { createCertificate, editCertificate } from "@/lib/actions/certificate.actions";
+import { createCertificate, editCertificate } from "@/lib/actions/profile/certificate.actions";
 import { convertMonthYearFormat } from "@/lib/utils";
 
 interface ICertificateModalProps {

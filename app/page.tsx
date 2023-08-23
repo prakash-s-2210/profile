@@ -1,17 +1,18 @@
-import { getProfileData } from "@/lib/actions/profile.actions";
+import { getProfileData } from "@/lib/actions/profile/profile.actions";
 import UserProfileSection from "@/components/sections/UserProfileSection";
 import Tab from "@/components/sections/Tab";
 import { IProfile, ProfileProps } from "@/types";
 import Portfolio from "@/components/sections/portfolio/Portfolio";
 import Resume from "@/components/sections/resume/Resume";
-import { getCountries } from "@/lib/actions/countriesFlag.actions";
+import { getCountries } from "@/lib/actions/profile/countriesFlag.actions";
 import Navbar from "@/components/shared/Navbar";
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const Home = async ({ searchParams }: ProfileProps) => {
   const query = searchParams.query;
-  const result: IProfile[] = await getProfileData();
-  const profileData: IProfile = result[0];
+  const result = await getProfileData();
+  const profileData = result[0] as IProfile;
   const countries = await getCountries();
 
   const filteredLanguagesWithImages = profileData.languages
