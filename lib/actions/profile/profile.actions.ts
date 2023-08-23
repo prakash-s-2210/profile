@@ -35,7 +35,6 @@ export const getProfileData = async () => {
       })
       .limit(1)
       .exec();
-    console.log(profileData);
     return JSON.parse(JSON.stringify(profileData));
   } catch (error) {
     console.log(error);

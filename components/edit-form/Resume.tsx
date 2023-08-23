@@ -19,8 +19,6 @@ interface IResumeFormProps {
   profileData: IProfile;
 }
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {};
-
 const Resume = ({ profileData }: IResumeFormProps) => {
   const router = useRouter();
   const [isWorkExperienceModalOpen, setIsWorkExperienceModalOpen] =
@@ -36,6 +34,21 @@ const Resume = ({ profileData }: IResumeFormProps) => {
     techStacks: profileData.techStacks,
     interests: profileData.interests,
     languages: profileData.languages,
+  });
+
+  const sortedWorkExperience = [...profileData.workExperience]; // Create a copy of the array
+  sortedWorkExperience.sort((a, b) => {
+    const startDateA = new Date(a.startDate).getTime();
+    const startDateB = new Date(b.startDate).getTime();
+
+    return startDateB - startDateA;
+  });
+  const sortedEducation = [...profileData.education]; // Create a copy of the array
+  sortedEducation.sort((a, b) => {
+    const startDateA = new Date(a.startDate).getTime();
+    const startDateB = new Date(b.startDate).getTime();
+
+    return startDateB - startDateA;
   });
 
   const closeWorkExperienceModal = () => {
@@ -110,7 +123,7 @@ const Resume = ({ profileData }: IResumeFormProps) => {
           </div>
 
           <div className="flex flex-col gap-6">
-            {profileData.workExperience.map((company) => {
+            {sortedWorkExperience.map((company) => {
               return (
                 <div
                   key={company.companyName}
@@ -176,7 +189,7 @@ const Resume = ({ profileData }: IResumeFormProps) => {
           </div>
 
           <div className="flex flex-col gap-6">
-            {profileData.education.map((education) => {
+            {sortedEducation.map((education) => {
               return (
                 <div
                   key={education.name}

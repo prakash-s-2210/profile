@@ -13,13 +13,27 @@ interface IResumeProps {
 }
 
 const Resume = ({ profileData, filteredLanguagesWithImages }: IResumeProps) => {
+  const sortedWorkExperience = [...profileData.workExperience]; // Create a copy of the array
+  sortedWorkExperience.sort((a, b) => {
+    const startDateA = new Date(a.startDate).getTime();
+    const startDateB = new Date(b.startDate).getTime();
+
+    return startDateB - startDateA;
+  });
+  const sortedEducation = [...profileData.education]; // Create a copy of the array
+  sortedEducation.sort((a, b) => {
+    const startDateA = new Date(a.startDate).getTime();
+    const startDateB = new Date(b.startDate).getTime();
+
+    return startDateB - startDateA;
+  });
   return (
     <div className="max-md:mx-5 flex flex-col gap-10 mt-10">
       <About profileData={profileData} />
 
       <section className="flex flex-col gap-5">
         {profileData.workExperience.length > 0 &&
-          profileData.workExperience.map((experience) => (
+          sortedWorkExperience.map((experience) => (
             <div key={experience.title}>
               <div className="flex gap-4 max-sm:flex-col p-6 bg-zinc-50 border border-zinc-100 rounded-2xl">
                 <Image
@@ -65,7 +79,7 @@ const Resume = ({ profileData, filteredLanguagesWithImages }: IResumeProps) => {
 
       <section className="flex flex-col gap-5">
         {profileData.education.length > 0 &&
-          profileData.education.map((education) => (
+          sortedEducation.map((education) => (
             <div key={education.name}>
               <div className="flex gap-4 max-sm:flex-col p-6 bg-zinc-50 border border-zinc-100 rounded-2xl">
                 <Image
@@ -116,8 +130,17 @@ const Resume = ({ profileData, filteredLanguagesWithImages }: IResumeProps) => {
           {profileData.techStacks.map((tech) => {
             const [label, imgUrl] = tech.split("|");
             return (
-              <div key={label} className="flex gap-2 p-2 pr-3 bg-zinc-50 border border-zinc-100 rounded-lg">
-                <Image src={imgUrl} alt={label} width={20} height={20} className="w-5 h-5" />
+              <div
+                key={label}
+                className="flex gap-2 p-2 pr-3 bg-zinc-50 border border-zinc-100 rounded-lg"
+              >
+                <Image
+                  src={imgUrl}
+                  alt={label}
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
 
                 <p className="font-semibold text-base text-zinc-900">
                   {label.charAt(0).toUpperCase() + label.slice(1)}
