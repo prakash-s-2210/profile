@@ -6,12 +6,12 @@ import Portfolio from "@/components/sections/portfolio/Portfolio";
 import Resume from "@/components/sections/resume/Resume";
 import { getCountries } from "@/lib/actions/countriesFlag.actions";
 import Navbar from "@/components/shared/Navbar";
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 const Home = async ({ searchParams }: ProfileProps) => {
   const query = searchParams.query;
   const result: IProfile[] = await getProfileData();
   const profileData: IProfile = result[0];
-  console.log(profileData.projects[1]);
   const countries = await getCountries();
 
   const filteredLanguagesWithImages = profileData.languages
@@ -26,7 +26,7 @@ const Home = async ({ searchParams }: ProfileProps) => {
 
   return (
     <>
-      <Navbar profilePicture = {profileData.profilePicture} query={query} />
+      <Navbar profilePicture={profileData.profilePicture} query={query} />
 
       <main className="py-11 max-w-[738px] mx-auto flex flex-col">
         <UserProfileSection profileData={profileData} query={query} />

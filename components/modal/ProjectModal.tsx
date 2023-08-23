@@ -29,7 +29,7 @@ interface IProjectModalProps {
   id?: Types.ObjectId;
   projectInfo?: IProject;
 }
-
+export const revalidate = 0;
 const ProjectModal = ({
   openModal,
   closeModal,
@@ -42,7 +42,7 @@ const ProjectModal = ({
   const [isPending, startTransition] = useTransition();
   const [projectData, setProjectData] = useState({
     title: projectInfo?.title ?? "",
-    technology: projectInfo?.technology ?? "",
+    technology: projectInfo?.technology ?? undefined,
     githubLink: projectInfo?.githubLink ?? "",
     picture: projectInfo?.picture ?? "",
   });
@@ -166,14 +166,16 @@ const ProjectModal = ({
               </label>
 
               <Select
-                value={projectInfo?.technology}
-                onValueChange={(value) =>
-                  handleInputChange("technology", value)
-                }
+              defaultValue={projectInfo?.technology}
+                value={projectData.technology}
+                onValueChange={(value) => {
+                  console.log(value);
+                  handleInputChange("technology", value);
+                }}
                 required
               >
                 <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent h-fit px-4 py-3 border border-border rounded-lg text-gray-500">
-                  <SelectValue placeholder="Select Technology"></SelectValue>
+                  <SelectValue placeholder="Select Technology" ></SelectValue>
                 </SelectTrigger>
 
                 <SelectContent className="max-h-52 overflow-y-auto">

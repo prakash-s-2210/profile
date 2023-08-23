@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 // Create a Certificate
 export async function createCertificate(
   title: string,
-  technology: string,
+  technology: string | undefined,
   issuedDate: Date | string,
   credentials: string,
   id: Types.ObjectId
@@ -28,7 +28,7 @@ export async function createCertificate(
 // Update Certificate
 export async function editCertificate(
   title: string,
-  technology: string,
+  technology: string | undefined,
   issuedDate: Date | string,
   credentials: string,
   id: Types.ObjectId

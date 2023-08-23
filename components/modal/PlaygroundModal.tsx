@@ -43,7 +43,7 @@ const PlaygroundModal = ({
   const [isPending, startTransition] = useTransition();
   const [playgroundData, setPlaygroundData] = useState({
     title: playgroundInfo?.title ?? "",
-    technology: playgroundInfo?.technology ?? "",
+    technology: playgroundInfo?.technology ?? undefined,
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,7 +117,7 @@ const PlaygroundModal = ({
               </label>
 
               <Select
-                value={playgroundInfo?.technology}
+                value={playgroundData.technology}
                 onValueChange={(value) =>
                   handleInputChange("technology", value)
                 }

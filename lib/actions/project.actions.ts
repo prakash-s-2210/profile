@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 // Create a Project
 export async function createProject(
     title: string,
-    technology: string,
+    technology: string | undefined,
     githubLink: string,
     picture: string,
     id: Types.ObjectId
@@ -28,7 +28,7 @@ export async function createProject(
   // Update Project
   export async function editProject(
     title: string,
-    technology: string,
+    technology: string | undefined,
     githubLink: string,
     picture: string,
     id: Types.ObjectId

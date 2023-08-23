@@ -42,7 +42,7 @@ const CertificateModal = ({
   const issuedDate = convertMonthYearFormat(certificateInfo?.issuedDate as Date)
   const [certificateData, setCertificateData] = useState({
     title: certificateInfo?.title ?? "",
-    technology: certificateInfo?.technology ?? "",
+    technology: certificateInfo?.technology ?? undefined,
     issuedDate: issuedDate  ?? "",
     credentials: certificateInfo?.credentials ?? "",
   });
@@ -124,7 +124,7 @@ const CertificateModal = ({
               </label>
 
               <Select
-                value={certificateInfo?.technology}
+                value={certificateData?.technology}
                 onValueChange={(value) =>
                   handleInputChange("technology", value)
                 }

@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 // Create a Playground
 export async function createPlayground(
   title: string,
-  technology: string,
+  technology: string | undefined,
   id: Types.ObjectId
 ) {
   try {
@@ -24,7 +24,7 @@ export async function createPlayground(
 // Update Project
 export async function editPlayground(
   title: string,
-  technology: string,
+  technology: string | undefined,
   id: Types.ObjectId
 ) {
   try {
