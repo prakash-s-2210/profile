@@ -14,12 +14,14 @@ import { technologies } from "@/constants";
 import { Checkbox } from "../shadcn-ui/checkbox";
 import { areArraysEqual } from "@/lib/utils";
 import { updateResume } from "@/lib/actions/edit-form/editForm.actions";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface IResumeFormProps {
   profileData: IProfile;
 }
 
 const Resume = ({ profileData }: IResumeFormProps) => {
+  const {toast} = useToast();
   const router = useRouter();
   const [isWorkExperienceModalOpen, setIsWorkExperienceModalOpen] =
     useState(false);
@@ -82,18 +84,22 @@ const Resume = ({ profileData }: IResumeFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    const { techStacks, interests, languages } = resumeInfo;
-    const id = profileData._id;
-    await updateResume({
-      techStacks,
-      interests,
-      languages,
-      id,
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
+    // setIsSubmitting(true);
+    // const { techStacks, interests, languages } = resumeInfo;
+    // const id = profileData._id;
+    // await updateResume({
+    //   techStacks,
+    //   interests,
+    //   languages,
+    //   id,
+    // });
 
-    setIsSubmitting(false);
-    setHasChanges(false);
+    // setIsSubmitting(false);
+    // setHasChanges(false);
     startTransition(() => {
       router.push("/?query=resume");
       router.refresh();

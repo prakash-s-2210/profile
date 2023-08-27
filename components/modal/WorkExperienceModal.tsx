@@ -13,6 +13,7 @@ import {
   createWorkExperience,
   editWorkExperience,
 } from "@/lib/actions/edit-form/workExperience.actions";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface IWorkExperienceModalProps {
   openModal: boolean;
@@ -27,6 +28,7 @@ const WorkExperienceModal = ({
   id,
   workExperienceInfo,
 }: IWorkExperienceModalProps) => {
+  const {toast} = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -41,55 +43,59 @@ const WorkExperienceModal = ({
   });
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    const {
-      title,
-      companyName,
-      location,
-      startDate,
-      endDate,
-      present,
-      description,
-    } = workExperienceData;
-
-    if (workExperienceInfo) {
-      await editWorkExperience({
-        title,
-        companyName,
-        location,
-        startDate,
-        endDate,
-        present,
-        description,
-        id: workExperienceInfo._id,
-      });
-    } else {
-      await createWorkExperience({
-        title,
-        companyName,
-        location,
-        startDate,
-        endDate,
-        present,
-        description,
-        id,
-      });
-      setWorkExperienceData({
-        title: "",
-        companyName: "",
-        location: "",
-        startDate: "",
-        endDate: "",
-        present: false,
-        description: "",
-      });
-    }
-    setIsSubmitting(false);
-    closeModal();
-    startTransition(() => {
-      router.push("/?query=resume");
-      router.refresh();
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
+    // setIsSubmitting(true);
+    // const {
+    //   title,
+    //   companyName,
+    //   location,
+    //   startDate,
+    //   endDate,
+    //   present,
+    //   description,
+    // } = workExperienceData;
+
+    // if (workExperienceInfo) {
+    //   await editWorkExperience({
+    //     title,
+    //     companyName,
+    //     location,
+    //     startDate,
+    //     endDate,
+    //     present,
+    //     description,
+    //     id: workExperienceInfo._id,
+    //   });
+    // } else {
+    //   await createWorkExperience({
+    //     title,
+    //     companyName,
+    //     location,
+    //     startDate,
+    //     endDate,
+    //     present,
+    //     description,
+    //     id,
+    //   });
+    //   setWorkExperienceData({
+    //     title: "",
+    //     companyName: "",
+    //     location: "",
+    //     startDate: "",
+    //     endDate: "",
+    //     present: false,
+    //     description: "",
+    //   });
+    // }
+    // setIsSubmitting(false);
+    closeModal();
+    // startTransition(() => {
+    //   router.push("/?query=resume");
+    //   router.refresh();
+    // });
   };
 
   const handleInputChange = (name: string, value: string | boolean) => {

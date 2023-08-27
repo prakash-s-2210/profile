@@ -10,6 +10,7 @@ import Modal from "../shared/Modal";
 import { IEducation } from "@/types";
 import { Checkbox } from "../shadcn-ui/checkbox";
 import { createEducation, editEducation } from "@/lib/actions/edit-form/education.actions";
+import { useToast } from "../shadcn-ui/use-toast";
 
 
 interface IEducationModalProps {
@@ -25,6 +26,7 @@ const EducationModal = ({
   id,
   educationInfo,
 }: IEducationModalProps) => {
+  const {toast} = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -39,55 +41,59 @@ const EducationModal = ({
   });
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    const {
-        name,
-        location,
-        qualification,
-        startDate,
-        endDate,
-        present,
-        description
-     } = educationData;
-
-    if (educationInfo) {
-      await editEducation({
-        name,
-        location,
-        qualification,
-        startDate,
-        endDate,
-        present,
-        description,
-        id: educationInfo._id,
-      });
-    } else {
-      await createEducation({
-        name,
-        location,
-        qualification,
-        startDate,
-        endDate,
-        present,
-        description,
-        id,
-      });
-      setEducationData({
-        name: "",
-        location: "",
-        qualification: "",
-        startDate: "",
-        endDate: "",
-        present: false,
-        description
-      });
-    }
-    setIsSubmitting(false);
-    closeModal();
-    startTransition(() => {
-      router.push("/?query=resume");
-      router.refresh();
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
+    // setIsSubmitting(true);
+    // const {
+    //     name,
+    //     location,
+    //     qualification,
+    //     startDate,
+    //     endDate,
+    //     present,
+    //     description
+    //  } = educationData;
+
+    // if (educationInfo) {
+    //   await editEducation({
+    //     name,
+    //     location,
+    //     qualification,
+    //     startDate,
+    //     endDate,
+    //     present,
+    //     description,
+    //     id: educationInfo._id,
+    //   });
+    // } else {
+    //   await createEducation({
+    //     name,
+    //     location,
+    //     qualification,
+    //     startDate,
+    //     endDate,
+    //     present,
+    //     description,
+    //     id,
+    //   });
+    //   setEducationData({
+    //     name: "",
+    //     location: "",
+    //     qualification: "",
+    //     startDate: "",
+    //     endDate: "",
+    //     present: false,
+    //     description
+    //   });
+    // }
+    // setIsSubmitting(false);
+    closeModal();
+    // startTransition(() => {
+    //   router.push("/?query=resume");
+    //   router.refresh();
+    // });
   };
 
   const handleInputChange = (name: string, value: string | boolean) => {

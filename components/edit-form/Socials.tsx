@@ -6,12 +6,14 @@ import { useState, useTransition } from "react";
 import { IProfile } from "@/types";
 import { updateSocials } from "@/lib/actions/edit-form/editForm.actions";
 import { Switch } from "../shadcn-ui/switch";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface IProfileFormProps {
   profileData: IProfile;
 }
 
 const Socials = ({ profileData }: IProfileFormProps) => {
+  const {toast} = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
@@ -30,33 +32,37 @@ const Socials = ({ profileData }: IProfileFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    const {
-      github,
-      linkedin,
-      facebook,
-      instagram,
-      dribble,
-      behance,
-      youtube,
-      gmail,
-      socialLinks
-    } = socialsInfo;
-    const id = profileData._id;
-    await updateSocials({
-      github,
-      linkedin,
-      facebook,
-      instagram,
-      dribble,
-      behance,
-      youtube,
-      gmail,
-      socialLinks,
-      id,
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
-    setIsSubmitting(false);
-    setHasChanges(false);
+    // setIsSubmitting(true);
+    // const {
+    //   github,
+    //   linkedin,
+    //   facebook,
+    //   instagram,
+    //   dribble,
+    //   behance,
+    //   youtube,
+    //   gmail,
+    //   socialLinks
+    // } = socialsInfo;
+    // const id = profileData._id;
+    // await updateSocials({
+    //   github,
+    //   linkedin,
+    //   facebook,
+    //   instagram,
+    //   dribble,
+    //   behance,
+    //   youtube,
+    //   gmail,
+    //   socialLinks,
+    //   id,
+    // });
+    // setIsSubmitting(false);
+    // setHasChanges(false);
     startTransition(() => {
       router.push("/");
       router.refresh();

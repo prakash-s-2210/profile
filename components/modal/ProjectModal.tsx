@@ -17,11 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn-ui/select";
-import { createProject, editProject } from "@/lib/actions/profile/project.actions";
+import {
+  createProject,
+  editProject,
+} from "@/lib/actions/profile/project.actions";
 import { technologies } from "@/constants";
 import { IProject, tech } from "@/types";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface IProjectModalProps {
   openModal: boolean;
@@ -36,6 +40,7 @@ const ProjectModal = ({
   id,
   projectInfo,
 }: IProjectModalProps) => {
+  const { toast } = useToast();
   const { startUpload } = useUploadThing("media");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -50,51 +55,55 @@ const ProjectModal = ({
   const [files, setFiles] = useState<File[]>([]);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!projectData.picture) return;
-
-    setLoading(true);
-
-    const blob = projectData.picture;
-
-    const hasImageChanged = isBase64Image(blob);
-    let picture = null;
-
-    if (hasImageChanged) {
-      const imageResponse = await startUpload(files);
-      if (imageResponse?.[0]?.url) {
-        picture = imageResponse[0].url;
-      }
-    }
-
-    if (projectInfo) {
-      await editProject(
-        projectData.title,
-        projectData.technology,
-        projectData.githubLink,
-        picture ? picture : projectData.picture,
-        projectInfo._id
-      );
-    } else {
-      await createProject(
-        projectData.title,
-        projectData.technology,
-        projectData.githubLink,
-        picture ? picture : projectData.picture,
-        id!
-      );
-      setProjectData({
-        title: "",
-        technology: "",
-        githubLink: "",
-        picture: "",
-      });
-    }
-    setFiles([]);
-    setLoading(false);
-    closeModal();
-    startTransition(() => {
-      router.refresh();
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
+    // if (!projectData.picture) return;
+
+    // setLoading(true);
+
+    // const blob = projectData.picture;
+
+    // const hasImageChanged = isBase64Image(blob);
+    // let picture = null;
+
+    // if (hasImageChanged) {
+    //   const imageResponse = await startUpload(files);
+    //   if (imageResponse?.[0]?.url) {
+    //     picture = imageResponse[0].url;
+    //   }
+    // }
+
+    // if (projectInfo) {
+    //   await editProject(
+    //     projectData.title,
+    //     projectData.technology,
+    //     projectData.githubLink,
+    //     picture ? picture : projectData.picture,
+    //     projectInfo._id
+    //   );
+    // } else {
+    //   await createProject(
+    //     projectData.title,
+    //     projectData.technology,
+    //     projectData.githubLink,
+    //     picture ? picture : projectData.picture,
+    //     id!
+    //   );
+    //   setProjectData({
+    //     title: "",
+    //     technology: "",
+    //     githubLink: "",
+    //     picture: "",
+    //   });
+    // }
+    // setFiles([]);
+    // setLoading(false);
+    closeModal();
+    // startTransition(() => {
+    //   router.refresh();
+    // });
   };
 
   const handleInputChange = (name: string, value: string) => {
@@ -166,7 +175,7 @@ const ProjectModal = ({
               </label>
 
               <Select
-              defaultValue={projectInfo?.technology}
+                defaultValue={projectInfo?.technology}
                 value={projectData.technology}
                 onValueChange={(value) => {
                   console.log(value);
@@ -175,7 +184,7 @@ const ProjectModal = ({
                 required
               >
                 <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent h-fit px-4 py-3 border border-border rounded-lg text-gray-500">
-                  <SelectValue placeholder="Select Technology" ></SelectValue>
+                  <SelectValue placeholder="Select Technology"></SelectValue>
                 </SelectTrigger>
 
                 <SelectContent className="max-h-52 overflow-y-auto">

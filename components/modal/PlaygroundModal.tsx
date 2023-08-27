@@ -24,6 +24,7 @@ import {
   createPlayground,
   editPlayground,
 } from "@/lib/actions/profile/playground.actions";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface IPlaygroundModalProps {
   openModal: boolean;
@@ -38,6 +39,7 @@ const PlaygroundModal = ({
   id,
   playgroundInfo,
 }: IPlaygroundModalProps) => {
+  const {toast} = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -48,29 +50,34 @@ const PlaygroundModal = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    if (playgroundInfo) {
-      await editPlayground(
-        playgroundData.title,
-        playgroundData.technology,
-        playgroundInfo._id
-      );
-    } else {
-      await createPlayground(
-        playgroundData.title,
-        playgroundData.technology,
-        id!
-      );
-      setPlaygroundData({
-        title: "",
-        technology: "",
-      });
-    }
-    setLoading(false);
-    closeModal();
-    startTransition(() => {
-      router.refresh();
+
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
+    // setLoading(true);
+    // if (playgroundInfo) {
+    //   await editPlayground(
+    //     playgroundData.title,
+    //     playgroundData.technology,
+    //     playgroundInfo._id
+    //   );
+    // } else {
+    //   await createPlayground(
+    //     playgroundData.title,
+    //     playgroundData.technology,
+    //     id!
+    //   );
+    //   setPlaygroundData({
+    //     title: "",
+    //     technology: "",
+    //   });
+    // }
+    // setLoading(false);
+    closeModal();
+    // startTransition(() => {
+    //   router.refresh();
+    // });
   };
 
   const handleInputChange = (name: string, value: string) => {

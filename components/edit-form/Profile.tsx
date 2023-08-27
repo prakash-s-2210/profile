@@ -9,12 +9,14 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { Switch } from "../shadcn-ui/switch";
 import { isBase64Image } from "@/lib/utils";
 import { updateProfile } from "@/lib/actions/edit-form/editForm.actions";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface IProfileFormProps {
   profileData: IProfile;
 }
 
 const Profile = ({ profileData }: IProfileFormProps) => {
+  const {toast} = useToast();
   const { startUpload } = useUploadThing("media");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,51 +39,58 @@ const Profile = ({ profileData }: IProfileFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    const blob = profileInfo.profilePicture;
-
-    const hasImageChanged = isBase64Image(blob);
-    let picture = null;
-
-    if (hasImageChanged) {
-      const imageResponse = await startUpload(files);
-      if (imageResponse?.[0]?.url) {
-        picture = imageResponse[0].url;
-      }
-    }
-    const {
-      name,
-      about,
-      headline,
-      location,
-      profession,
-      dob,
-      gender,
-      followersAndFollowing,
-      xp,
-      achievementBadges,
-    } = profileInfo;
-    const profilePicture = picture ?? profileInfo.profilePicture;
-    const id = profileData._id;
-    await updateProfile({
-      name,
-      profilePicture,
-      headline,
-      location,
-      about,
-      profession,
-      dob,
-      gender,
-      followersAndFollowing,
-      xp,
-      achievementBadges,
-      id,
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
+    console.log("I amhere")
+   
+    // setIsSubmitting(true);
 
-    setFiles([]);
-    setIsSubmitting(false);
-    setHasChanges(false);
+    // const blob = profileInfo.profilePicture;
+
+    // const hasImageChanged = isBase64Image(blob);
+    // let picture = null;
+
+    // if (hasImageChanged) {
+    //   const imageResponse = await startUpload(files);
+    //   if (imageResponse?.[0]?.url) {
+    //     picture = imageResponse[0].url;
+    //   }
+    // }
+    // const {
+    //   name,
+    //   about,
+    //   headline,
+    //   location,
+    //   profession,
+    //   dob,
+    //   gender,
+    //   followersAndFollowing,
+    //   xp,
+    //   achievementBadges,
+    // } = profileInfo;
+    // const profilePicture = picture ?? profileInfo.profilePicture;
+    // const id = profileData._id;
+    // await updateProfile({
+    //   name,
+    //   profilePicture,
+    //   headline,
+    //   location,
+    //   about,
+    //   profession,
+    //   dob,
+    //   gender,
+    //   followersAndFollowing,
+    //   xp,
+    //   achievementBadges,
+    //   id,
+    // });
+
+    // setFiles([]);
+    // setIsSubmitting(false);
+    // setHasChanges(false);
     startTransition(() => {
       router.push("/");
       router.refresh();

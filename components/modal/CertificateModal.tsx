@@ -22,6 +22,7 @@ import { technologies } from "@/constants";
 import { ICertificate, tech } from "@/types";
 import { createCertificate, editCertificate } from "@/lib/actions/profile/certificate.actions";
 import { convertMonthYearFormat } from "@/lib/utils";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface ICertificateModalProps {
   openModal: boolean;
@@ -36,6 +37,7 @@ const CertificateModal = ({
   id,
   certificateInfo,
 }: ICertificateModalProps) => {
+  const {toast} = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -49,35 +51,39 @@ const CertificateModal = ({
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    if (certificateInfo) {
-        await editCertificate(
-          certificateData.title,
-          certificateData.technology,
-          certificateData.issuedDate,
-          certificateData.credentials,
-          certificateInfo._id
-        );
-    } else {
-        await createCertificate(
-          certificateData.title,
-          certificateData.technology,
-          certificateData.issuedDate,
-          certificateData.credentials,
-          id!
-        );
-      setCertificateData({
-        title: "",
-        technology: "",
-        issuedDate: "",
-        credentials: ""
-      });
-    }
-    setLoading(false);
-    closeModal();
-    startTransition(() => {
-      router.refresh();
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
+    // setLoading(true);
+    // if (certificateInfo) {
+    //     await editCertificate(
+    //       certificateData.title,
+    //       certificateData.technology,
+    //       certificateData.issuedDate,
+    //       certificateData.credentials,
+    //       certificateInfo._id
+    //     );
+    // } else {
+    //     await createCertificate(
+    //       certificateData.title,
+    //       certificateData.technology,
+    //       certificateData.issuedDate,
+    //       certificateData.credentials,
+    //       id!
+    //     );
+    //   setCertificateData({
+    //     title: "",
+    //     technology: "",
+    //     issuedDate: "",
+    //     credentials: ""
+    //   });
+    // }
+    // setLoading(false);
+    closeModal();
+    // startTransition(() => {
+    //   router.refresh();
+    // });
   };
 
   const handleInputChange = (name: string, value: string) => {

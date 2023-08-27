@@ -105,7 +105,7 @@ const UserProfileSection = ({ profileData, query }: IUserProfileProps) => {
           </div>
 
           <div className="flex-between flex-wrap gap-5 border-t border-t-[#F4F4F5] py-8">
-            <div className="flex flex-wrap gap-4">
+            {profileData.socialLinks && <div className="flex flex-wrap gap-4">
               {profileData.gmail && (
                 <Link
                   href={profileData.gmail}
@@ -226,7 +226,7 @@ const UserProfileSection = ({ profileData, query }: IUserProfileProps) => {
                   />
                 </Link>
               )}
-            </div>
+            </div>}
 
             {query === "portfolio" || query === undefined ? (
               <div className="flex gap-4">

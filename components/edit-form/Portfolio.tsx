@@ -8,12 +8,14 @@ import { IProfile, IProject } from "@/types";
 import { timeAgo } from "@/lib/utils";
 import { Types } from "mongoose";
 import { updatePortfolio } from "@/lib/actions/edit-form/editForm.actions";
+import { useToast } from "../shadcn-ui/use-toast";
 
 interface IPortfolioFormProps {
   profileData: IProfile;
 }
 
 const Portfolio = ({ profileData }: IPortfolioFormProps) => {
+  const {toast} = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [projectChanges, setProjectChanges] = useState(false);
@@ -60,16 +62,20 @@ const Portfolio = ({ profileData }: IPortfolioFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    const { projects, playgrounds } = portfolioInfo;
-    const id = profileData._id;
-    await updatePortfolio({
-      projects,
-      playgrounds,
+    toast({
+      variant: "destructive",
+      description: "You are not Authorized",
     });
-    setIsSubmitting(false);
-    setProjectChanges(false);
-    setPlaygroundChanges(false);
+    // setIsSubmitting(true);
+    // const { projects, playgrounds } = portfolioInfo;
+    // const id = profileData._id;
+    // await updatePortfolio({
+    //   projects,
+    //   playgrounds,
+    // });
+    // setIsSubmitting(false);
+    // setProjectChanges(false);
+    // setPlaygroundChanges(false);
     startTransition(() => {
       router.push("/");
       router.refresh();
