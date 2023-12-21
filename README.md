@@ -1,4 +1,4 @@
-# Codedamn Portfolio - Codedamn assessment
+# My Portfolio - Codedamn Profile - Codedamn assessment
 
 ## Screenshots
 
